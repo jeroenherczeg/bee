@@ -9,10 +9,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Beesie extends Command
 {
-    /**
-     * Application Namespace
-     */
+
     protected $namespace = 'App';
+
+    protected $models = null;
 
     /**
      * Configure the command options.
@@ -36,6 +36,10 @@ class Beesie extends Command
         $this->readConfigFile();
 
         $output->writeln('<info>Namespace ' . $this->namespace . '...</info>');
+
+        foreach ($this->models as $model) {
+            $output->writeln('<info>Creating model ' . $model->name . '</info>');
+        }
 
 
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
@@ -61,8 +65,12 @@ class Beesie extends Command
 
         $config = json_decode($configContents);
 
-        if(isset($config->namespace)) {
+        if (isset($config->namespace)) {
             $this->namespace = $config->namespace;
+        }
+
+        if (isset($config->models)) {
+            $this->models = $config->models;
         }
     }
 
