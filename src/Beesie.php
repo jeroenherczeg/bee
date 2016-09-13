@@ -50,6 +50,16 @@ class Beesie extends Command
 
         $output->writeln('<info>Namespace ' . $this->namespace . '...</info>');
 
+        $process = new Process('ls -lsa');
+        $process->run();
+
+        // executes after the command finishes
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        echo $process->getOutput();
+
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
 }
