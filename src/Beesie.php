@@ -13,15 +13,21 @@ class Beesie extends Command
 
     protected $output;
 
-    protected $namespace = 'App';
-
-    protected $models = null;
+    protected $configFile;
 
     protected $sourceDirectory = '/Users/jeroen/.composer/vendor/jeroenherczeg/bee/src/';
 
     protected $projectDirectory;
 
-    protected $configFile;
+    protected $projectModelsDirectory;
+
+    protected $namespace = 'App';
+
+    protected $models = null;
+
+
+
+
 
     /**
      * Configure the command options.
@@ -49,7 +55,7 @@ class Beesie extends Command
 
         $this->loadConfig();
 
-        $output->writeln('<info>Namespace ' . $this->namespace . '...</info>');
+        $output->writeln('Let\'s get \xF0\x9F\x90\x9D zzzzy!');
 
         if (!is_null($this->models)) {
             $this->createModels();
@@ -58,11 +64,14 @@ class Beesie extends Command
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
 
-
+    /**
+     * Initialize
+     */
     protected function init()
     {
         $this->projectDirectory = getcwd() . '/';
         $this->configFile = $this->projectDirectory . '.bee';
+        $this->projectModelsDirectory = $this->projectDirectory . 'app/Models/Eloquent/';
     }
 
     /**
@@ -91,8 +100,15 @@ class Beesie extends Command
         }
     }
 
+    /**
+     * Create the models
+     */
     protected function createModels()
     {
+        if (!file_exists($this->projectModelsDirectory)) {
+            mkdir($this->projectModelsDirectory, 0755, true);
+        }
+
         $modelContents = file_get_contents($this->sourceDirectory . 'stubs/model.stub');
 
         $modelContents = str_replace('{{namespace}}', $this->namespace, $modelContents);
@@ -100,7 +116,7 @@ class Beesie extends Command
         foreach ($this->models as $model) {
             $data = str_replace('{{class}}', $model->name, $modelContents);
             $this->output->writeln('<info>Creating model ' . $model->name . '</info>');
-            file_put_contents($this->projectDirectory . 'app/'. ucfirst($model->name) . '.php', $data);
+            file_put_contents($this->projectModelsDirectory . ucfirst($model->name) . '.php', $data);
 
         }
     }
