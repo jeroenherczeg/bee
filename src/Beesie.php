@@ -17,6 +17,12 @@ class Beesie extends Command
 
     protected $models = null;
 
+    protected $sourceDirectory = '/Users/jeroen/.composer/vendor/jeroenherczeg/bee/src/';
+
+    protected $projectDirectory;
+
+    protected $configFile;
+
     /**
      * Configure the command options.
      *
@@ -39,7 +45,9 @@ class Beesie extends Command
         $this->input = $input;
         $this->output = $output;
 
-        $this->readConfigFile();
+        $this->init();
+
+        $this->loadConfig();
 
         $output->writeln('<info>Namespace ' . $this->namespace . '...</info>');
 
@@ -51,24 +59,28 @@ class Beesie extends Command
     }
 
 
+    protected function init()
+    {
+        $this->projectDirectory = getcwd() . '/';
+        $this->configFile = $this->projectDirectory . '.bee';
+    }
+
     /**
      * Read Config file
      */
-    protected function readConfigFile()
+    protected function loadConfig()
     {
-        $configFile = getcwd().'/.bee';
-
-        if (!file_exists($configFile)) {
+        if (!file_exists($this->configFile)) {
             throw new RuntimeException('No config file (.bee) found!');
         }
 
-        $configContents = file_get_contents($configFile);
+        $contents = file_get_contents($this->configFile);
 
-        if (!$this->isValidJson($configContents)) {
+        if (!$this->isValidJson($contents)) {
             throw new RuntimeException('The config file is not valid JSON!');
         }
 
-        $config = json_decode($configContents);
+        $config = json_decode($contents);
 
         if (isset($config->namespace)) {
             $this->namespace = $config->namespace;
@@ -81,14 +93,14 @@ class Beesie extends Command
 
     protected function createModels()
     {
-        $modelContents = file_get_contents('~/.composer/vendor/jeroenherczeg/bee/src/stubs/model.stub');
+        $modelContents = file_get_contents($this->sourceDirectory . 'stubs/model.stub');
 
         $modelContents = str_replace('{{namespace}}', $this->namespace, $modelContents);
 
         foreach ($this->models as $model) {
             $data = str_replace('{{class}}', $model->name, $modelContents);
             $this->output->writeln('<info>Creating model ' . $model->name . '</info>');
-            file_put_contents(getcwd() . '/app/'. ucfirst($model->name) . '.php', $data);
+            file_put_contents($this->projectDirectory . 'app/'. ucfirst($model->name) . '.php', $data);
 
         }
     }
