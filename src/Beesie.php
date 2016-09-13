@@ -9,6 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Beesie extends Command
 {
+    protected $input;
+
+    protected $output;
 
     protected $namespace = 'App';
 
@@ -33,14 +36,16 @@ class Beesie extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->input = $input;
+        $this->output = $output;
+
         $this->readConfigFile();
 
         $output->writeln('<info>Namespace ' . $this->namespace . '...</info>');
 
-        foreach ($this->models as $model) {
-            $output->writeln('<info>Creating model ' . $model->name . '</info>');
+        if (!is_null($this->models)) {
+            $this->createModels();
         }
-
 
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
@@ -71,6 +76,20 @@ class Beesie extends Command
 
         if (isset($config->models)) {
             $this->models = $config->models;
+        }
+    }
+
+    protected function createModels()
+    {
+        $modelContents = file_get_contents('~/.composer/vendor/jeroenherczeg/bee/src/stubs/model.stub');
+
+        $modelContents = str_replace('{{namespace}}', $this->namespace, $modelContents);
+
+        foreach ($this->models as $model) {
+            $data = str_replace('{{class}}', $model->name, $modelContents);
+            $this->output->writeln('<info>Creating model ' . $model->name . '</info>');
+            file_put_contents(getcwd() . '/app/'. ucfirst($model->name) . '.php', $data);
+
         }
     }
 
