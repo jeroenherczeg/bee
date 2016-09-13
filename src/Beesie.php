@@ -55,7 +55,7 @@ class Beesie extends Command
 
         $configContents = file_get_contents($configFile);
 
-        if (!$this->isValidJson()) {
+        if (!$this->isValidJson($configContents)) {
             throw new RuntimeException('The config file is not valid JSON!');
         }
 
