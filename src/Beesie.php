@@ -2,9 +2,6 @@
 
 namespace Jeroenherczeg\Bee;
 
-use ZipArchive;
-use RuntimeException;
-use GuzzleHttp\Client;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -34,7 +31,7 @@ class Beesie extends Command
         $this
             ->setName('generate')
             ->setDescription('Generate a bee')
-            ->addArgument('name', InputArgument::REQUIRED, 'How do you want to call your project?');
+            ->addArgument('name', InputArgument::REQUIRED, 'How do you want to call your project?')
             ->addArgument('namespace', InputArgument::REQUIRED, 'How do you want to call your namespace?');
     }
 
