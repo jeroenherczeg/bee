@@ -2,24 +2,17 @@
 
 namespace Jeroenherczeg\Bee;
 
-use Symfony\Component\Process\Process;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Beesie extends Command
 {
     /**
-     * Application Name
-     */
-    protected $name;
-
-    /**
      * Application Namespace
      */
-    protected $namespace;
+    protected $namespace = 'App';
 
     /**
      * Configure the command options.
@@ -28,11 +21,7 @@ class Beesie extends Command
      */
     protected function configure()
     {
-        $this
-            ->setName('generate')
-            ->setDescription('Generate a bee')
-            ->addArgument('name', InputArgument::REQUIRED, 'How do you want to call your project?')
-            ->addArgument('namespace', InputArgument::REQUIRED, 'How do you want to call your namespace?');
+        $this->setName('generate')->setDescription('Generate a bee');
     }
 
     /**
@@ -44,22 +33,18 @@ class Beesie extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->name = $input->getArgument('name');
-        $this->namespace = $input->getArgument('namespace');
-        $output->writeln('<info>Crafting ' . $this->name . '...</info>');
+        $this->readConfigFile();
 
         $output->writeln('<info>Namespace ' . $this->namespace . '...</info>');
 
-        $process = new Process('ls -lsa');
-        $process->run();
-
-        // executes after the command finishes
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-
-        echo $process->getOutput();
 
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
+    }
+
+    protected function readConfigFile()
+    {
+        if (!file_exists(getcwd().'/.bee')) {
+            throw new RuntimeException('No config file (.bee) found!');
+        }
     }
 }
