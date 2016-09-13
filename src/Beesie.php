@@ -12,8 +12,18 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewCommand extends Command
+class Beesie extends Command
 {
+    /**
+     * Application Name
+     */
+    protected $name;
+
+    /**
+     * Application Namespace
+     */
+    protected $namespace;
+
     /**
      * Configure the command options.
      *
@@ -25,6 +35,7 @@ class NewCommand extends Command
             ->setName('generate')
             ->setDescription('Generate a bee')
             ->addArgument('name', InputArgument::REQUIRED, 'How do you want to call your project?');
+            ->addArgument('namespace', InputArgument::REQUIRED, 'How do you want to call your namespace?');
     }
 
     /**
@@ -36,8 +47,11 @@ class NewCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>Crafting application...</info>');
+        $this->name = $input->getArgument('name');
+        $this->namespace = $input->getArgument('namespace');
+        $output->writeln('<info>Crafting ' . $this->name . '...</info>');
 
+        $output->writeln('<info>Namespace ' . $this->namespace . '...</info>');
 
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
