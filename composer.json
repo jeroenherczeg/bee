@@ -1,0 +1,24 @@
+{
+    "name": "jeroenherczeg/bee",
+    "description": "Laravel / Vue RAD",
+    "keywords": ["laravel", "vue"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jeroen Herczeg",
+            "email": "jeroen@herczeg.be"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Jeroenherczeg\\Bee\\": "src/"
+        }
+    },
+    "require": {
+        "symfony/console": "~2.3|~3.0",
+        "symfony/process": "~2.3|~3.0"
+    },
+    "bin": [
+        "bee"
+    ]
+}
