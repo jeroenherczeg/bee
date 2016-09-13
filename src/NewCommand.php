@@ -23,8 +23,8 @@ class NewCommand extends Command
     {
         $this
             ->setName('generate')
-            ->setDescription('Generate a bee');
-            ->addArgument('name', InputArgument::REQUIRED, 'How do you want to call your project?')
+            ->setDescription('Generate a bee')
+            ->addArgument('name', InputArgument::REQUIRED, 'How do you want to call your project?');
     }
 
     /**
