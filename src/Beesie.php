@@ -43,8 +43,16 @@ class Beesie extends Command
 
     protected function readConfigFile()
     {
-        if (!file_exists(getcwd().'/.bee')) {
+        $configFile = getcwd().'/.bee';
+
+        if (!file_exists($configFile)) {
             throw new RuntimeException('No config file (.bee) found!');
         }
+
+        $configContents = file_get_contents($configFile);
+
+        $config = json_decode($configContents);
+
+        $this->namespace = $config->namespace;
     }
 }
