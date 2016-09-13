@@ -41,6 +41,10 @@ class Beesie extends Command
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
 
+
+    /**
+     * Read Config file
+     */
     protected function readConfigFile()
     {
         $configFile = getcwd().'/.bee';
@@ -51,8 +55,24 @@ class Beesie extends Command
 
         $configContents = file_get_contents($configFile);
 
+        if (!$this->isValidJson()) {
+            throw new RuntimeException('The config file is not valid JSON!');
+        }
+
         $config = json_decode($configContents);
 
-        $this->namespace = $config->namespace;
+        if(isset($config->namespace)) {
+            $this->namespace = $config->namespace;
+        }
+    }
+
+    /**
+     * @param $contents
+     *
+     * @return bool
+     */
+    protected function isValidJson($contents) {
+        json_decode($contents);
+        return (json_last_error() === JSON_ERROR_NONE);
     }
 }
