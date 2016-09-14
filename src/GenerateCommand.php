@@ -41,7 +41,7 @@ class GenerateCommand extends AbstractCommand
 
         //$this->init();
 
-        //$this->loadConfig();
+        $this->loadConfig();
 
         $output->writeln('Let\'s get BEEzzzy!');
         $output->writeln($this->config);
@@ -142,13 +142,5 @@ class GenerateCommand extends AbstractCommand
     //
     //
     //
-    ///**
-    // * @param $contents
-    // *
-    // * @return bool
-    // */
-    //protected function isValidJson($contents) {
-    //    json_decode($contents);
-    //    return (json_last_error() === JSON_ERROR_NONE);
-    //}
+
 }

@@ -7,23 +7,44 @@ use Symfony\Component\Console\Exception\RuntimeException;
 
 abstract class AbstractCommand extends Command
 {
+    /**
+     * @var
+     */
     private $configFile;
-    
-    protected $config;
-    
-    public function __construct($name)
+
+    /**
+     * @var null
+     */
+    protected $config = null;
+
+    /**
+     * Load the configuration file
+     */
+    protected function loadConfig()
     {
-        parent::__construct($name);
-        
-        $this->loadConfig();
+        $this->configFile = __DIR__ .'../config.json';
+
+        if (!file_exists($this->configFile)) {
+            throw new RuntimeException('No config file found!');
+        }
+
+        $contents = file_get_contents($this->configFile);
+
+        if (!$this->isValidJson($contents)) {
+            throw new RuntimeException('The config file is not valid JSON!');
+        }
+
+        $this->config = json_decode($contents);
     }
-    
-    private function loadConfig()
-    {
-        $this->config = __DIR__;
-        //if (!file_exists($this->configFile)) {
-        //    throw new RuntimeException('No config file (.bee) found!');
-        //}
-        //$this->config =
+
+    /**
+     * @param $contents
+     *
+     * @return bool
+     */
+    protected function isValidJson($contents) {
+        json_decode($contents);
+
+        return (json_last_error() === JSON_ERROR_NONE);
     }
 }
