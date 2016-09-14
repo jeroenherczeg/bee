@@ -125,7 +125,10 @@ class Beesie extends Command
             file_put_contents($this->projectModelsDirectory . ucfirst($model->name) . '.php', $data);
         }
     }
-    
+
+    /**
+     * Create the migrations
+     */
     public function createMigrations()
     {
         if (!file_exists($this->projectMigrationsDirectory)) {
@@ -136,12 +139,22 @@ class Beesie extends Command
 
         foreach ($this->models as $model) {
             $data = str_replace('{{class}}', 'Create' . ucfirst($this->str->plural($model->name)) . 'Table', $migrationContents);
-            $data = str_replace('{{table}}', $this->str->plural($model->name), $data);
+            $data = str_replace('{{table}}', $this->str->plural(strtolower($model->name)), $data);
+
+            $schema = '';
+
+            foreach ($model->columns as $column) {
+                $schema .= '$table->string(\'' . $column->name .'\');' . "\n";
+            }
+
+            $data = str_replace('{{schema_up}}', $schema, $data);
 
             $this->output->writeln('<info>Creating migration for ' . $this->str->plural($model->name) . '</info>');
-            file_put_contents($this->projectMigrationsDirectory . 'create_' .ucfirst($this->str->plural($model->name)) . '_table.php', $data);
+            file_put_contents($this->projectMigrationsDirectory . '2014_10_12_000000_create_' .$this->str->plural(strtolower($model->name)) . '_table.php', $data);
         }
     }
+    
+    
 
     /**
      * @param $contents

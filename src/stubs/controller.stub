@@ -1,0 +1,97 @@
+<?php
+
+namespace {{namespace}}\Http\Controllers;
+
+use {{namespace}}\Http\Requests\{{class}}Request;
+use {{namespace}}\Models\Eloquent\{{class}};
+use {{namespace}}\Models\Transformers\{{class}}Transformer;
+
+/**
+ * Class {{class}}Controller
+ * @package {{namespace}}\Http\Controllers
+ */
+class {{class}}Controller extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $users = {{class}}::all();
+
+        return $this->respondWithCollection($users, new {{class}}Transformer());
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param {{class}}Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store({{class}}Request $request)
+    {
+        $user = {{class}}::create($request->all());
+        $user->fresh();
+
+        return $this->respondWithCreatedItem($user, new {{class}}Transformer());
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  string $uuid
+     * @return \Illuminate\Http\Response
+     */
+    public function show($uuid)
+    {
+        $user = {{class}}::whereUuid($uuid)->first();
+
+        if (!$user) {
+            return $this->respondWithErrorNotFound();
+        }
+
+        return $this->respondWithItem($user, new {{class}}Transformer());
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param {{class}}Request $request
+     * @param  string $uuid
+     * @return \Illuminate\Http\Response
+     */
+    public function update({{class}}Request $request, $uuid)
+    {
+        $user = {{class}}::whereUuid($uuid)->first();
+
+        if (!$user) {
+            return $this->respondWithErrorNotFound();
+        }
+
+        $user->update($request->all());
+        $user->fresh();
+
+        return $this->respondWithItem($user, new {{class}}Transformer());
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  string $uuid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($uuid)
+    {
+        $user = {{class}}::whereUuid($uuid)->first();
+
+        if (!$user) {
+            return $this->respondWithErrorNotFound();
+        }
+
+        $user->delete();
+
+        return $this->respondOk();
+    }
+}
