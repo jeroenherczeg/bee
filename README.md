@@ -16,6 +16,6 @@ $ composer global require "jeroenherczeg/bee"
 # Respond to questions to generate a .bee file
 $ bee init
 
-# Scaffold from a .bee file
+# Scaffold from a .bee scaffolding file
 $ bee generate
 ```

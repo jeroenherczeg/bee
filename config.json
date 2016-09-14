@@ -1,12 +1,22 @@
 {
     "default": {
-        "namespace": "App"
+        "namespace":       "App"
     },
     "path": {
         "stub": {
-            "model": "/stubs/model.stub",
-            "migration": "/stubs/migration.stub",
-            "controller": "/stubs/controller.stub"
+            "model":        "/stubs/model.stub",
+            "migration":    "/stubs/migration.stub",
+            "controller":   "/stubs/controller.stub"
+        },
+        "output": {
+            "controllers":  "/app/Http/Controllers/",
+            "requests":     "/app/Http/Requests/",
+            "models":       "/app/Models/Eloquent/",
+            "transformers": "/app/Models/Transformers/",
+            "factories":    "/database/factories/",
+            "migrations":   "/database/migrations/",
+            "seeds":        "/database/seeds/",
+            "tests":        "/tests"
         }
     }
 }

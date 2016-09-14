@@ -24,7 +24,7 @@ class GenerateCommand extends AbstractCommand
      */
     protected function configure()
     {
-        $this->setName('generate')->setDescription('Scaffold from a .bee file');
+        $this->setName('generate')->setDescription('Scaffold from a .bee scaffolding file');
     }
 
     /**
@@ -40,11 +40,13 @@ class GenerateCommand extends AbstractCommand
         $this->output = $output;
 
         //$this->init();
+        $output->writeln('Let\'s get BEEzzzy!');
 
         $this->loadConfig();
 
-        $output->writeln('Let\'s get BEEzzzy!');
-        $output->writeln($this->config);
+        $output->writeln($this->config->path->stub->model);
+
+
 
         //if (!is_null($this->models)) {
         //    $this->createModels();
@@ -62,8 +64,8 @@ class GenerateCommand extends AbstractCommand
     //    $this->str = new Str();
     //    $this->projectDirectory = getcwd() . '/';
     //    $this->configFile = $this->projectDirectory . '.bee';
-    //    $this->projectModelsDirectory = $this->projectDirectory . 'app/Models/Eloquent/';
-    //    $this->projectMigrationsDirectory = $this->projectDirectory . 'database/migrations/';
+
+
     //}
     //
     ///**
