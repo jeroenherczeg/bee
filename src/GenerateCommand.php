@@ -7,6 +7,10 @@ use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class GenerateCommand
+ * @package Jeroenherczeg\Bee
+ */
 class GenerateCommand extends AbstractCommand
 {
     protected $input;
@@ -40,6 +44,7 @@ class GenerateCommand extends AbstractCommand
         //$this->loadConfig();
 
         $output->writeln('Let\'s get BEEzzzy!');
+        $output->writeln($this->config);
 
         //if (!is_null($this->models)) {
         //    $this->createModels();
