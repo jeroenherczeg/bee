@@ -1,0 +1,12 @@
+{
+    "default": {
+        "namespace": "App"
+    },
+    "path": {
+        "stub": {
+            "model": "/stubs/model.stub",
+            "migration": "/stubs/migration.stub",
+            "controller": "/stubs/controller.stub"
+        }
+    }
+}
