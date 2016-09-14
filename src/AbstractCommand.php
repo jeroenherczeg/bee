@@ -22,19 +22,19 @@ abstract class AbstractCommand extends Command
      */
     protected function loadConfig()
     {
-        $this->configFile = __DIR__ .'../config.json';
-        $this->config = $this->configFile;
-        //if (!file_exists($this->configFile)) {
-        //    throw new RuntimeException('No config file found!');
-        //}
-        //
-        //$contents = file_get_contents($this->configFile);
-        //
-        //if (!$this->isValidJson($contents)) {
-        //    throw new RuntimeException('The config file is not valid JSON!');
-        //}
-        //
-        //$this->config = json_decode($contents);
+        $this->configFile = __DIR__ .'/../config.json';
+
+        if (!file_exists($this->configFile)) {
+            throw new RuntimeException('No config file found!');
+        }
+
+        $contents = file_get_contents($this->configFile);
+
+        if (!$this->isValidJson($contents)) {
+            throw new RuntimeException('The config file is not valid JSON!');
+        }
+
+        $this->config = json_decode($contents);
     }
 
     /**
