@@ -2,6 +2,7 @@
 
 namespace Jeroenherczeg\Bee;
 
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,11 +22,13 @@ class Beesie extends Command
 
     protected $projectModelsDirectory;
 
+    protected $projectMigrationsDirectory;
+
     protected $namespace = 'App';
 
     protected $models = null;
 
-
+    protected $str;
 
 
 
@@ -59,6 +62,7 @@ class Beesie extends Command
 
         if (!is_null($this->models)) {
             $this->createModels();
+            $this->createMigrations();
         }
 
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
@@ -69,9 +73,11 @@ class Beesie extends Command
      */
     protected function init()
     {
+        $this->str = new Str();
         $this->projectDirectory = getcwd() . '/';
         $this->configFile = $this->projectDirectory . '.bee';
         $this->projectModelsDirectory = $this->projectDirectory . 'app/Models/Eloquent/';
+        $this->projectMigrationsDirectory = $this->projectDirectory . 'database/migrations/';
     }
 
     /**
@@ -117,7 +123,23 @@ class Beesie extends Command
             $data = str_replace('{{class}}', $model->name, $modelContents);
             $this->output->writeln('<info>Creating model ' . $model->name . '</info>');
             file_put_contents($this->projectModelsDirectory . ucfirst($model->name) . '.php', $data);
+        }
+    }
+    
+    public function createMigrations()
+    {
+        if (!file_exists($this->projectMigrationsDirectory)) {
+            mkdir($this->projectMigrationsDirectory, 0755, true);
+        }
 
+        $migrationContents = file_get_contents($this->sourceDirectory . 'stubs/migration.stub');
+
+        foreach ($this->models as $model) {
+            $data = str_replace('{{class}}', 'Create' . ucfirst($this->str->plural($model->name)) . 'Table', $migrationContents);
+            $data = str_replace('{{table}}', $this->str->plural($model->name), $data);
+
+            $this->output->writeln('<info>Creating migration for ' . $this->str->plural($model->name) . '</info>');
+            file_put_contents($this->projectMigrationsDirectory . 'create_' .ucfirst($this->str->plural($model->name)) . '_table.php', $data);
         }
     }
 
