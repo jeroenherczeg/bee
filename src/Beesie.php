@@ -144,7 +144,7 @@ class Beesie extends Command
             $schema = '';
 
             foreach ($model->columns as $column) {
-                $schema .= '$table->string(\'' . $column->name .'\');' . "\n";
+                $schema .= '$table->string(\'' . $column->name .'\');' . PHP_EOL . '            ';
             }
 
             $data = str_replace('{{schema_up}}', $schema, $data);
