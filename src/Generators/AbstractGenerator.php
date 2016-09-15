@@ -54,10 +54,12 @@ abstract class AbstractGenerator
      */
     protected function saveFile($data, $fileName, $path)
     {
+        $path = getcwd() . $path;
+
         if (!file_exists($path)) {
             mkdir($path, 0755, true);
         }
 
-        file_put_contents(getcwd() . $path . $fileName, $data);
+        file_put_contents($path . $fileName, $data);
     }
 }
