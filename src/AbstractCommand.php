@@ -24,11 +24,11 @@ abstract class AbstractCommand extends Command
     protected function loadScaffold()
     {
         $file = '.bee';
-        $path = getcwd();
+        $path = getcwd() . '/';
 
         return $this->loadJson($file, $path);
     }
-    
+
     /**
      * @param $file
      * @param $path
