@@ -3,6 +3,7 @@
 namespace Jeroenherczeg\Bee;
 
 use Jeroenherczeg\Bee\Generators\MigrationGenerator;
+use Jeroenherczeg\Bee\Generators\ModelGenerator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -39,6 +40,7 @@ class GenerateCommand extends AbstractCommand
         $data = $this->loadScaffold();
         
         (new MigrationGenerator($data, $config, $output))->generate();
+        (new ModelGenerator($data, $config, $output))->generate();
 
         $output->writeln('<comment>And we are done!.</comment>');
     }

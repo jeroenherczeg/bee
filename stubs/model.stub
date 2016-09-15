@@ -12,7 +12,7 @@ class {{class}} extends Model
      * @var array
      */
     protected $fillable = [
-        
+        {{fillable_fields}}
     ];
 
     /**
