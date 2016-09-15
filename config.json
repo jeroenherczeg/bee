@@ -1,6 +1,7 @@
 {
     "default": {
-        "namespace":       "App"
+        "namespace":       "App",
+        "override":         true
     },
     "path": {
         "stub": {
