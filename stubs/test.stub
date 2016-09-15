@@ -1,0 +1,177 @@
+<?php
+
+namespace {{namespace}}Test;
+
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use {{namespace}}\Models\Eloquent\{{class}};
+use {{namespace}}\Models\Transformers\{{class}}Transformer;
+use {{namespace}}Test\TestCase;
+
+/**
+ * Class {{class}}
+ * @package {{namespace}}Test
+ */
+class {{class}}Test extends TestCase
+{
+    use DatabaseMigrations;
+
+    /**
+     * @test
+     */
+    public function can_receive_all_{{model}}s()
+    {
+        $this->make{{class}}();
+
+        $this->json('get', '/api/{{model}}')
+            ->seeStatusCode(200)
+            ->seeJsonStructure([
+                'data' => [
+                    '*' => $this->getFields()
+                ]
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function can_receive_an_{{model}}()
+    {
+        ${{model}}s = $this->make{{class}}();
+        ${{model}} = ${{model}}s->first();
+
+        $this->json('get', '/api/{{model}}/' . ${{model}}->id)
+            ->seeJsonStructure([
+                'data' => $this->getFields()
+            ])
+            ->seeStatusCode(200)
+            ->seeJson(
+                (new {{class}}Transformer())->transform(${{model}})
+            );
+    }
+
+    /**
+     * @test
+     */
+    public function receives_an_error_when_accessing_a_non_existing_{{model}}()
+    {
+        $this->json('get', '/api/{{model}}/666')
+            ->seeJsonStructure([
+                'errors'
+            ])
+            ->seeStatusCode(404)
+            ->seeJsonEquals([
+                'errors' => [trans('errors.not_found')]
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function can_create_an_{{model}}()
+    {
+        ${{model}}Fields = $this->getFakeData();
+
+        $this->json('post', 'api/{{model}}', ${{model}}Fields)
+            ->seeStatusCode(201)
+            ->seeJsonStructure([
+                'data' => $this->getFields()
+            ])->seeJson(${{model}}Fields);
+    }
+
+    /**
+     * @test
+     */
+    public function receives_a_validation_error_when_creating_an_empty_{{model}}()
+    {
+        $this->json('post', '/api/{{model}}', [])
+            ->seeStatusCode(422);
+    }
+
+    /**
+     * @test
+     */
+    public function can_update_an_{{model}}()
+    {
+        ${{model}}s = $this->make{{class}}();
+        ${{model}} = ${{model}}s->first();
+        ${{model}}Fields = $this->getFakeData();
+
+        $test = $this->json('put', 'api/{{model}}/' . ${{model}}->id, ${{model}}Fields)
+            ->seeStatusCode(200)
+            ->seeJsonStructure([
+                'data' => $this->getFields()
+            ]);
+        $test->seeJson(${{model}}Fields);
+    }
+
+    /**
+     * @test
+     */
+    public function receives_a_validation_error_when_updating_to_an_empty_{{model}}()
+    {
+        ${{model}}s = $this->make{{class}}();
+        ${{model}} = ${{model}}s->first();
+
+        $this->json('put', '/api/{{model}}/' . ${{model}}->id, [])
+            ->seeStatusCode(422);
+    }
+
+    /**
+     * @test
+     */
+    public function receives_an_error_when_updating_a_non_existing_{{model}}()
+    {
+        ${{model}}Fields = $this->getFakeData();
+
+        $this->json('put', 'api/{{model}}/666', ${{model}}Fields)
+            ->seeStatusCode(404)
+            ->seeJsonStructure([
+                'errors'
+            ])
+            ->seeJsonEquals([
+                'errors' => [trans('errors.not_found')]
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function can_delete_an_{{model}}()
+    {
+        ${{model}}s = $this->make{{class}}();
+        ${{model}} = ${{model}}s->first();
+
+        $this->json('delete', '/api/{{model}}/' . ${{model}}->id)
+            ->seeStatusCode(200);
+    }
+
+    /**
+     * @test
+     */
+    public function receives_an_error_when_deleting_a_non_existing_{{model}}()
+    {
+        $this->json('delete', '/api/{{model}}/666')
+            ->seeJsonStructure([
+                'errors'
+            ])
+            ->seeStatusCode(404)
+            ->seeJsonEquals([
+                'errors' => [trans('errors.not_found')]
+            ]);
+    }
+
+    private function make{{class}}()
+    {
+        return factory({{class}}::class, 2)->create();
+    }
+
+    private function getFakeData()
+    {
+        return factory({{class}}::class)->make()->toArray();
+    }
+
+    private function getFields()
+    {
+        return array_keys((new {{class}}Transformer())->transform(factory({{class}}::class)->make()));
+    }
+}

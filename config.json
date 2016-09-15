@@ -5,11 +5,14 @@
     },
     "path": {
         "stub": {
-            "model":        "/stubs/model.stub",
-            "migration":    "/stubs/migration.stub",
             "controller":   "/stubs/controller.stub",
+            "request":      "/stubs/request.stub",
+            "model":        "/stubs/model.stub",
             "transformer":  "/stubs/transformer.stub",
-            "request":      "/stubs/request.stub"
+            "factory":      "/stubs/factory.stub",
+            "migration":    "/stubs/migration.stub",
+            "seed":         "/stubs/seed.stub",
+            "test":         "/stubs/test.stub"
         },
         "output": {
             "controllers":  "/app/Http/Controllers/",

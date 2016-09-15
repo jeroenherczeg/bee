@@ -1,0 +1,11 @@
+<?php
+
+use {{namespace}}\Models\Eloquent\{{class}};
+use Faker\Generator;
+
+$factory->define({{class}}::class, function (Generator $faker) {
+
+    return [
+        {{fields}}
+    ];
+});

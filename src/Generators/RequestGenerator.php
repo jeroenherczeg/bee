@@ -38,16 +38,11 @@ class RequestGenerator extends AbstractGenerator
         $rules = '';
 
         foreach ($table->columns as $column) {
-            switch ($column->name) {
-                case 'timestamps':
-                    break;
-                default:
-                    $rules .= '\'' . $column->name . '\' => \'required\',';
+            if ($column->name !== 'timestamps') {
+                    $rules .= '\'' . $column->name . '\' => \'required\',' . PHP_EOL . '                    ';
             }
-
-            $rules .= PHP_EOL . '            ';
         }
-        
+
         return $rules;
     }
 }

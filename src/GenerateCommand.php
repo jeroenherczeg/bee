@@ -3,9 +3,12 @@
 namespace Jeroenherczeg\Bee;
 
 use Jeroenherczeg\Bee\Generators\ControllerGenerator;
+use Jeroenherczeg\Bee\Generators\FactoryGenerator;
 use Jeroenherczeg\Bee\Generators\MigrationGenerator;
 use Jeroenherczeg\Bee\Generators\ModelGenerator;
 use Jeroenherczeg\Bee\Generators\RequestGenerator;
+use Jeroenherczeg\Bee\Generators\SeedGenerator;
+use Jeroenherczeg\Bee\Generators\TestGenerator;
 use Jeroenherczeg\Bee\Generators\TransformerGenerator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -54,6 +57,9 @@ class GenerateCommand extends AbstractCommand
         (new ControllerGenerator($data, $config, $output))->generate();
         (new TransformerGenerator($data, $config, $output))->generate();
         (new RequestGenerator($data, $config, $output))->generate();
+        (new FactoryGenerator($data, $config, $output))->generate();
+        (new SeedGenerator($data, $config, $output))->generate();
+        (new TestGenerator($data, $config, $output))->generate();
 
         $output->writeln('<comment>And we are done!.</comment>');
     }
