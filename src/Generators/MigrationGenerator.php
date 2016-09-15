@@ -61,7 +61,15 @@ class MigrationGenerator extends AbstractGenerator
                     $schema .= '->nullable()';
                 }
                 if (isset($column->modifiers->default)) {
-                    $schema .= '->default(' . $column->modifiers->default  . ')';
+                    $schema .= '->default(';
+                    if (is_int($column->modifiers->default)) {
+                        $schema .= '\'';
+                    }
+                    $schema .= $column->modifiers->default;
+                    if (is_int($column->modifiers->default)) {
+                        $schema .= '\'';
+                    }
+                    $schema .= ')';
                 }
             }
 
