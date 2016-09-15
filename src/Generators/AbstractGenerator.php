@@ -29,7 +29,7 @@ abstract class AbstractGenerator
      */
     protected function loadFile($fileName)
     {
-        return file_get_contents($fileName);
+        return file_get_contents(__DIR__ .'/../../' . $fileName);
     }
 
     /**
@@ -58,6 +58,6 @@ abstract class AbstractGenerator
             mkdir($path, 0755, true);
         }
 
-        file_put_contents($path . $fileName, $data);
+        file_put_contents(getcwd() . $path . $fileName, $data);
     }
 }

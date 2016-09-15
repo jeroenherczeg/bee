@@ -32,7 +32,7 @@ class GenerateCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         
-        $output->writeln('Let\'s get BEEzzzy!');
+        $output->writeln('<comment>Let\'s get BEEzzzy!</comment>');
 
         $config = $this->loadConfig();
         
