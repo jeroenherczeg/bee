@@ -19,7 +19,7 @@ class ModelGenerator extends AbstractGenerator
 
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
-                'namespace' => $this->config->namespace,
+                'namespace' => $this->config->default->namespace,
                 'class' =>  ucfirst($table->name),
                 'fillable_fields' => $this->buildFillableFields($table)
             ];
@@ -40,7 +40,7 @@ class ModelGenerator extends AbstractGenerator
         $fields = '';
 
         foreach ($table->columns as $column) {
-            $fields = '\'' . $column->name . '\'' . PHP_EOL . '        ';
+            $fields .= '\'' . $column->name . '\'' . PHP_EOL . '        ';
         }
 
         return $fields;
