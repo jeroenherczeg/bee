@@ -23,7 +23,7 @@ class ControllerGenerator extends AbstractGenerator
                 'namespace' => $this->config->default->namespace,
                 'class' =>  ucfirst($table->name),
                 'models' => $str->plural(ucfirst($table->name)),
-                'model' => ucfirst($table->name),
+                'model' => strtolower($table->name),
             ];
 
             $contents = $this->replace($replacements, $stub);

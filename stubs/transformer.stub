@@ -1,0 +1,16 @@
+<?php
+
+namespace {{namespace}}\Models\Transformers;
+
+use {{namespace}}\Models\{{class}};
+use League\Fractal\TransformerAbstract;
+
+class {{class}}Transformer extends TransformerAbstract
+{
+    public function transform({{class}} ${{model}})
+    {
+        return [
+            {{fields}}
+        ];
+    }
+}
