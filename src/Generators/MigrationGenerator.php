@@ -24,7 +24,7 @@ class MigrationGenerator extends AbstractGenerator
 
             $contents = $this->replace($replacements, $stub);
 
-            $fileName = '2014_10_12_' . str_pad($index, 6, "0", STR_PAD_LEFT) . '_create_' . strtolower($table->name) . '_table.php';
+            $fileName = date("Y_m_d") . '_' . str_pad($index, 6, "0", STR_PAD_LEFT) . '_create_' . strtolower($table->name) . '_table.php';
             $path = $this->config->path->output->migrations;
 
             $this->saveFile($contents, $fileName, $path);
