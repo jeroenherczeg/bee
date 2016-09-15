@@ -41,20 +41,31 @@ class MigrationGenerator extends AbstractGenerator
         foreach ($table->columns as $column) {
             switch ($column->name) {
                 case 'id':
-                    $schema .= '$table->increments(\'' . $column->name . '\');' . PHP_EOL . '            ';
+                    $schema .= '$table->increments(\'' . $column->name . '\')';
                     break;
                 case 'uuid':
-                    $schema .= '$table->uuid(\'' . $column->name . '\');' . PHP_EOL . '            ';
+                    $schema .= '$table->uuid(\'' . $column->name . '\')';
                     break;
                 case 'description':
-                    $schema .= '$table->text(\'' . $column->name . '\');' . PHP_EOL . '            ';
+                    $schema .= '$table->text(\'' . $column->name . '\')';
                     break;
                 case 'timestamps':
-                    $schema .= '$table->timestamps();' . PHP_EOL . '            ';
+                    $schema .= '$table->timestamps()';
                     break;
                 default:
-                    $schema .= '$table->string(\'' . $column->name .'\');' . PHP_EOL . '            ';
+                    $schema .= '$table->string(\'' . $column->name .'\')';
             }
+
+            if (isset($column->modifiers)) {
+                if (isset($column->modifiers->nullable)) {
+                    $schema .= '->nullable()';
+                }
+                if (isset($column->modifiers->default)) {
+                    $schema .= '->default(' . $column->modifiers->default  . ')';
+                }
+            }
+
+            $schema .= ';' . PHP_EOL . '            ';
 
         }
         return $schema;
