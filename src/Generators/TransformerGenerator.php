@@ -41,14 +41,14 @@ class TransformerGenerator extends AbstractGenerator
         foreach ($table->columns as $column) {
             switch ($column->name) {
                 case 'timestamps':
-                    $fields .= '\'created_at\' => $' . strtolower($table->name) . '->created_at,' . PHP_EOL . '        ';
+                    $fields .= '\'created_at\' => $' . strtolower($table->name) . '->created_at,' . PHP_EOL . '            ';
                     $fields .= '\'updated_at\' => $' . strtolower($table->name) . '->updated_at,';
                     break;
                 default:
                     $fields .= '\'' . $column->name . '\' => $' . strtolower($table->name) . '->' . $column->name . ',';
             }
 
-            $fields .= PHP_EOL . '        ';
+            $fields .= PHP_EOL . '            ';
         }
 
         return $fields;

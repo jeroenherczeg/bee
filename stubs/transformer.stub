@@ -2,7 +2,7 @@
 
 namespace {{namespace}}\Models\Transformers;
 
-use {{namespace}}\Models\{{class}};
+use {{namespace}}\Models\Eloquent\{{class}};
 use League\Fractal\TransformerAbstract;
 
 class {{class}}Transformer extends TransformerAbstract

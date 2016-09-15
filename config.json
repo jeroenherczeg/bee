@@ -8,7 +8,8 @@
             "model":        "/stubs/model.stub",
             "migration":    "/stubs/migration.stub",
             "controller":   "/stubs/controller.stub",
-            "transformer":  "/stubs/transformer.stub"
+            "transformer":  "/stubs/transformer.stub",
+            "request":      "/stubs/request.stub"
         },
         "output": {
             "controllers":  "/app/Http/Controllers/",
