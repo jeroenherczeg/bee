@@ -35,9 +35,7 @@ class RequestGenerator extends AbstractGenerator
 
     private function buildRules($table)
     {
-        $rules = 'switch($this->getMethod()) {';
-        $rules .= '    case \'POST\':';
-        $rules .= '        return [';
+        $rules = '';
 
         foreach ($table->columns as $column) {
             switch ($column->name) {
@@ -49,26 +47,7 @@ class RequestGenerator extends AbstractGenerator
 
             $rules .= PHP_EOL . '            ';
         }
-
-        $rules .= '        ];';
-        $rules .= '        break;';
-
-        $rules .= '    case \'PUT\':';
-        $rules .= '        return [';
-        foreach ($table->columns as $column) {
-            switch ($column->name) {
-                case 'timestamps':
-                    break;
-                default:
-                    $rules .= '\'' . $column->name . '\' => \'required\',';
-            }
-
-            $rules .= PHP_EOL . '            ';
-        }
-
-        $rules .= '        ];';
-        $rules .= '        break;';
-        $rules .= '}';
+        
         return $rules;
     }
 }

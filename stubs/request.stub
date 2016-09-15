@@ -23,8 +23,17 @@ class {{class}}Request extends FormRequest
      */
     public function rules()
     {
-        return [
-            {{rules}}
-        ];
+        switch($this->getMethod()) {
+            case 'POST':
+                return [
+                    {{rules}}
+                ];
+                break;
+
+            case 'PUT':
+                return [
+                    {{rules}}
+                ];
+        }
     }
 }
