@@ -1,7 +1,6 @@
 <?php
 
 namespace Jeroenherczeg\Bee\Generators;
-use Illuminate\Support\Str;
 
 /**
  * Class MigrationGenerator
@@ -14,7 +13,6 @@ class ModelGenerator extends AbstractGenerator
      */
     public function generate()
     {
-        $str = new Str();
         $stub = $this->loadFile($this->config->path->stub->model);
 
         foreach ($this->data->tables as $index => $table) {
@@ -40,7 +38,16 @@ class ModelGenerator extends AbstractGenerator
         $fields = '';
 
         foreach ($table->columns as $column) {
-            $fields .= '\'' . $column->name . '\'' . PHP_EOL . '        ';
+            switch ($column->name) {
+                case 'timestamps':
+                    $fields .= '\'created_at\'' . PHP_EOL . '        ';
+                    $fields .= '\'updated_at\'';
+                    break;
+                default:
+                    $fields .= '\'' . $column->name . '\'';
+            }
+
+            $fields .= PHP_EOL . '        ';
         }
 
         return $fields;

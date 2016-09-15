@@ -1,6 +1,7 @@
 <?php
 
 namespace Jeroenherczeg\Bee\Generators;
+
 use Illuminate\Support\Str;
 
 /**
