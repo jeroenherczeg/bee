@@ -9,13 +9,32 @@ namespace Jeroenherczeg\Bee\Generators;
 abstract class AbstractGenerator
 {
     /**
-     * AbstractGenerator constructor.
+     * @var
+     */
+    protected $data;
+
+    /**
+     * @var
+     */
+    protected $config;
+
+    /**
+     * @var
+     */
+    protected $output;
+
+    /**
+     * MigrationGenerator constructor.
      *
      * @param $data
      * @param $config
-     * @param $output
      */
-    abstract function __construct($data, $config, $output);
+    public function __construct($data, $config, $output)
+    {
+        $this->data = $data;
+        $this->config = $config;
+        $this->output = $output;
+    }
 
     /**
      * @return mixed

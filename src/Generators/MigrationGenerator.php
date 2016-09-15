@@ -9,41 +9,13 @@ namespace Jeroenherczeg\Bee\Generators;
 class MigrationGenerator extends AbstractGenerator
 {
     /**
-     * @var
-     */
-    protected $data;
-
-    /**
-     * @var
-     */
-    protected $config;
-
-    /**
-     * @var
-     */
-    protected $output;
-
-    /**
-     * MigrationGenerator constructor.
-     *
-     * @param $data
-     * @param $config
-     */
-    public function __construct($data, $config, $output)
-    {
-        $this->data = $data;
-        $this->config = $config;
-        $this->output = $output;
-    }
-
-    /**
      * Generate a migration
      */
     public function generate()
     {
         $stub = $this->loadFile($this->config->path->stub->migration);
 
-        foreach ($this->data->tables as $table) {
+        foreach ($this->data->tables as $index => $table) {
             $replacements = [
                 'class' => $table->name,
                 'table' => $table->name,
@@ -52,7 +24,7 @@ class MigrationGenerator extends AbstractGenerator
 
             $contents = $this->replace($replacements, $stub);
 
-            $fileName = '2014_10_12_000000_create_' . strtolower($table->name) . '_table.php';
+            $fileName = '2014_10_12_' . str_pad($index, 6, "0", STR_PAD_LEFT) . '_create_' . strtolower($table->name) . '_table.php';
             $path = $this->config->path->output->migrations;
 
             $this->saveFile($contents, $fileName, $path);
@@ -61,7 +33,7 @@ class MigrationGenerator extends AbstractGenerator
         }
     }
     
-    public function buildSchemaUp($table)
+    private function buildSchemaUp($table)
     {
         $schema = '';
         foreach ($table->columns as $column) {
