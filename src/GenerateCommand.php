@@ -2,6 +2,7 @@
 
 namespace Jeroenherczeg\Bee;
 
+use Jeroenherczeg\Bee\Generators\ControllerGenerator;
 use Jeroenherczeg\Bee\Generators\MigrationGenerator;
 use Jeroenherczeg\Bee\Generators\ModelGenerator;
 use Symfony\Component\Console\Input\InputInterface;
@@ -41,6 +42,7 @@ class GenerateCommand extends AbstractCommand
         
         (new MigrationGenerator($data, $config, $output))->generate();
         (new ModelGenerator($data, $config, $output))->generate();
+        (new ControllerGenerator($data, $config, $output))->generate();
 
         $output->writeln('<comment>And we are done!.</comment>');
     }

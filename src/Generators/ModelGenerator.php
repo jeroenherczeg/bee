@@ -3,13 +3,13 @@
 namespace Jeroenherczeg\Bee\Generators;
 
 /**
- * Class MigrationGenerator
+ * Class ModelGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
 class ModelGenerator extends AbstractGenerator
 {
     /**
-     * Generate a migration
+     * Generate models
      */
     public function generate()
     {
@@ -29,7 +29,7 @@ class ModelGenerator extends AbstractGenerator
 
             $this->saveFile($contents, $fileName, $path);
 
-            $this->output->writeln('<info>Creating model: ' . $fileName . '</info>');
+            $this->output->writeln('<info>Created model: ' . $fileName . '</info>');
         }
     }
 

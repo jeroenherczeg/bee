@@ -19,9 +19,9 @@ class {{class}}Controller extends Controller
      */
     public function index()
     {
-        $users = {{class}}::all();
+        ${{models}} = {{class}}::all();
 
-        return $this->respondWithCollection($users, new {{class}}Transformer());
+        return $this->respondWithCollection(${{models}}, new {{class}}Transformer());
     }
 
     /**
@@ -32,10 +32,10 @@ class {{class}}Controller extends Controller
      */
     public function store({{class}}Request $request)
     {
-        $user = {{class}}::create($request->all());
-        $user->fresh();
+        ${{model}} = {{class}}::create($request->all());
+        ${{model}}->fresh();
 
-        return $this->respondWithCreatedItem($user, new {{class}}Transformer());
+        return $this->respondWithCreatedItem(${{model}}, new {{class}}Transformer());
     }
 
     /**
@@ -46,13 +46,13 @@ class {{class}}Controller extends Controller
      */
     public function show($uuid)
     {
-        $user = {{class}}::whereUuid($uuid)->first();
+        ${{model}} = {{class}}::whereUuid($uuid)->first();
 
-        if (!$user) {
+        if (!${{model}}) {
             return $this->respondWithErrorNotFound();
         }
 
-        return $this->respondWithItem($user, new {{class}}Transformer());
+        return $this->respondWithItem(${{model}}, new {{class}}Transformer());
     }
 
     /**
@@ -64,16 +64,16 @@ class {{class}}Controller extends Controller
      */
     public function update({{class}}Request $request, $uuid)
     {
-        $user = {{class}}::whereUuid($uuid)->first();
+        ${{model}} = {{class}}::whereUuid($uuid)->first();
 
-        if (!$user) {
+        if (!${{model}}) {
             return $this->respondWithErrorNotFound();
         }
 
-        $user->update($request->all());
-        $user->fresh();
+        ${{model}}->update($request->all());
+        ${{model}}->fresh();
 
-        return $this->respondWithItem($user, new {{class}}Transformer());
+        return $this->respondWithItem(${{model}}, new {{class}}Transformer());
     }
 
     /**
@@ -84,13 +84,13 @@ class {{class}}Controller extends Controller
      */
     public function destroy($uuid)
     {
-        $user = {{class}}::whereUuid($uuid)->first();
+        ${{model}} = {{class}}::whereUuid($uuid)->first();
 
-        if (!$user) {
+        if (!${{model}}) {
             return $this->respondWithErrorNotFound();
         }
 
-        $user->delete();
+        ${{model}}->delete();
 
         return $this->respondOk();
     }

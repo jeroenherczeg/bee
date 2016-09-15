@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class MigrationGenerator extends AbstractGenerator
 {
     /**
-     * Generate a migration
+     * Generate migrations
      */
     public function generate()
     {
@@ -32,7 +32,7 @@ class MigrationGenerator extends AbstractGenerator
 
             $this->saveFile($contents, $fileName, $path);
 
-            $this->output->writeln('<info>Creating migration: ' . $fileName . '</info>');
+            $this->output->writeln('<info>Created migration: ' . $fileName . '</info>');
         }
     }
     
