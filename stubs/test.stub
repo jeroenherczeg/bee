@@ -43,10 +43,7 @@ class {{class}}Test extends TestCase
             ->seeJsonStructure([
                 'data' => $this->getFields()
             ])
-            ->seeStatusCode(200)
-            ->seeJson(
-                (new {{class}}Transformer())->transform(${{model}})
-            );
+            ->seeStatusCode(200);
     }
 
     /**

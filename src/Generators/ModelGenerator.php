@@ -40,11 +40,11 @@ class ModelGenerator extends AbstractGenerator
         foreach ($table->columns as $column) {
             switch ($column->name) {
                 case 'timestamps':
-                    $fields .= '\'created_at\'' . PHP_EOL . '        ';
-                    $fields .= '\'updated_at\'';
+                    $fields .= '\'created_at\',' . PHP_EOL . '        ';
+                    $fields .= '\'updated_at\',';
                     break;
                 default:
-                    $fields .= '\'' . $column->name . '\'';
+                    $fields .= '\'' . $column->name . '\',';
             }
 
             $fields .= PHP_EOL . '        ';
