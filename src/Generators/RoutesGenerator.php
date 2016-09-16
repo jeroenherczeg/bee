@@ -48,6 +48,7 @@ class RoutesGenerator extends AbstractGenerator
             ];
 
             $routes .= $this->replace($replacements, $stub);
+            $routes .= PHP_EOL;
         }
 
         return $routes;
