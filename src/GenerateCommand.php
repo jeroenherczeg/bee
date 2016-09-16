@@ -66,6 +66,8 @@ class GenerateCommand extends AbstractCommand
 
         $this->runCommand('composer dump');
 
+        $this->runCommand('./vendor/bin/phpunit');
+
         /**
          * VUE
          */
@@ -94,10 +96,6 @@ class GenerateCommand extends AbstractCommand
         unlink(getcwd() . '/resources/assets/js/components/Example.vue');
 
         // Install
-        $this->runCommand('npm install vue --save');
-        $this->runCommand('npm install vue-resource --save');
-        $this->runCommand('npm install vue-router --save');
-        $this->runCommand('npm install vuex --save');
 
         mkdir(getcwd() . '/resources/assets/js/views', 0755, true);
 
@@ -106,5 +104,10 @@ class GenerateCommand extends AbstractCommand
         $this->copyFile(__DIR__ . '/../assets/js/views/Home.vue', getcwd() . '/resources/assets/js/views/Home.vue');
         $this->copyFile(__DIR__ . '/../assets/js/views/NotFound.vue', getcwd() . '/resources/assets/js/views/NotFound.vue');
 
+        $this->copyFile(__DIR__ . '/../assets/files/package.json', getcwd() . '/package.json');
+
+        $this->runCommand('npm install');
+
+        $this->runCommand('gulp');
     }
 }
