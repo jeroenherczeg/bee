@@ -44,14 +44,20 @@ class FactoryGenerator extends AbstractGenerator
                 case 'id':
                 case 'timestamps':
                     break;
+                case 'uuid':
+                    $fields .= '\'' . $column->name . '\' => $faker->uuid,' . PHP_EOL . '        ';
+                    break;
                 case 'description':
-                    $fields .= '\'' . $column->name . '\' => $faker->realText(100),' . PHP_EOL . '          ';
+                    $fields .= '\'' . $column->name . '\' => $faker->realText(100),' . PHP_EOL . '        ';
+                    break;
+                case 'url':
+                    $fields .= '\'' . $column->name . '\' => $faker->url,' . PHP_EOL . '        ';
                     break;
                 case 'email':
-                    $fields .= '\'' . $column->name . '\' => $faker->email,' . PHP_EOL . '          ';
+                    $fields .= '\'' . $column->name . '\' => $faker->email,' . PHP_EOL . '        ';
                     break;
                 default:
-                    $fields .= '\'' . $column->name . '\' => $faker->sentence,' . PHP_EOL . '          ';
+                    $fields .= '\'' . $column->name . '\' => $faker->sentence,' . PHP_EOL . '        ';
             }
         }
         return $fields;
