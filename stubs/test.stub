@@ -22,7 +22,7 @@ class {{class}}Test extends TestCase
     {
         $this->make{{class}}();
 
-        $this->json('get', '/api/{{model}}')
+        $this->json('get', '/api/{{models}}')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'data' => [
@@ -39,7 +39,7 @@ class {{class}}Test extends TestCase
         ${{model}}s = $this->make{{class}}();
         ${{model}} = ${{model}}s->first();
 
-        $this->json('get', '/api/{{model}}/' . ${{model}}->id)
+        $this->json('get', '/api/{{models}}/' . ${{model}}->id)
             ->seeJsonStructure([
                 'data' => $this->getFields()
             ])
@@ -54,7 +54,7 @@ class {{class}}Test extends TestCase
      */
     public function receives_an_error_when_accessing_a_non_existing_{{model}}()
     {
-        $this->json('get', '/api/{{model}}/666')
+        $this->json('get', '/api/{{models}}/666')
             ->seeJsonStructure([
                 'errors'
             ])
@@ -71,7 +71,7 @@ class {{class}}Test extends TestCase
     {
         ${{model}}Fields = $this->getFakeData();
 
-        $this->json('post', 'api/{{model}}', ${{model}}Fields)
+        $this->json('post', 'api/{{models}}', ${{model}}Fields)
             ->seeStatusCode(201)
             ->seeJsonStructure([
                 'data' => $this->getFields()
@@ -83,7 +83,7 @@ class {{class}}Test extends TestCase
      */
     public function receives_a_validation_error_when_creating_an_empty_{{model}}()
     {
-        $this->json('post', '/api/{{model}}', [])
+        $this->json('post', '/api/{{models}}', [])
             ->seeStatusCode(422);
     }
 
@@ -96,7 +96,7 @@ class {{class}}Test extends TestCase
         ${{model}} = ${{model}}s->first();
         ${{model}}Fields = $this->getFakeData();
 
-        $test = $this->json('put', 'api/{{model}}/' . ${{model}}->id, ${{model}}Fields)
+        $test = $this->json('put', 'api/{{models}}/' . ${{model}}->id, ${{model}}Fields)
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'data' => $this->getFields()
@@ -112,7 +112,7 @@ class {{class}}Test extends TestCase
         ${{model}}s = $this->make{{class}}();
         ${{model}} = ${{model}}s->first();
 
-        $this->json('put', '/api/{{model}}/' . ${{model}}->id, [])
+        $this->json('put', '/api/{{models}}/' . ${{model}}->id, [])
             ->seeStatusCode(422);
     }
 
@@ -123,7 +123,7 @@ class {{class}}Test extends TestCase
     {
         ${{model}}Fields = $this->getFakeData();
 
-        $this->json('put', 'api/{{model}}/666', ${{model}}Fields)
+        $this->json('put', 'api/{{models}}/666', ${{model}}Fields)
             ->seeStatusCode(404)
             ->seeJsonStructure([
                 'errors'
@@ -141,7 +141,7 @@ class {{class}}Test extends TestCase
         ${{model}}s = $this->make{{class}}();
         ${{model}} = ${{model}}s->first();
 
-        $this->json('delete', '/api/{{model}}/' . ${{model}}->id)
+        $this->json('delete', '/api/{{models}}/' . ${{model}}->id)
             ->seeStatusCode(200);
     }
 
@@ -150,7 +150,7 @@ class {{class}}Test extends TestCase
      */
     public function receives_an_error_when_deleting_a_non_existing_{{model}}()
     {
-        $this->json('delete', '/api/{{model}}/666')
+        $this->json('delete', '/api/{{models}}/666')
             ->seeJsonStructure([
                 'errors'
             ])

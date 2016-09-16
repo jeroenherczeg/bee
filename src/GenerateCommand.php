@@ -12,6 +12,8 @@ use Jeroenherczeg\Bee\Generators\TestGenerator;
 use Jeroenherczeg\Bee\Generators\TransformerGenerator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * Class GenerateCommand
@@ -51,8 +53,16 @@ class GenerateCommand extends AbstractCommand
          * install fractal
          * copy base controller
          * composer autoload tests with namsespace
-         * 
+         *
          */
+
+        //composer require league/fractal
+        $process = new Process('ls -lsa');
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+        echo $process->getOutput();
 
         (new MigrationGenerator($data, $config, $output))->generate();
         (new ModelGenerator($data, $config, $output))->generate();

@@ -15,6 +15,7 @@ class TestGenerator extends AbstractGenerator
      */
     public function generate()
     {
+        $str = new Str();
         $stub = $this->loadFile($this->config->path->stub->test);
 
         foreach ($this->data->tables as $index => $table) {
@@ -22,6 +23,7 @@ class TestGenerator extends AbstractGenerator
                 'namespace' => $this->config->default->namespace,
                 'class' => ucfirst($table->name),
                 'model' => strtolower($table->name),
+                'models' => strtolower($str->plural($table->name)),
             ];
 
             $contents = $this->replace($replacements, $stub);

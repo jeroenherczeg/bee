@@ -41,12 +41,12 @@ class {{class}}Controller extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  string $uuid
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($uuid)
+    public function show($id)
     {
-        ${{model}} = {{class}}::whereUuid($uuid)->first();
+        ${{model}} = {{class}}::whereId($id)->first();
 
         if (!${{model}}) {
             return $this->respondWithErrorNotFound();
@@ -59,12 +59,12 @@ class {{class}}Controller extends Controller
      * Update the specified resource in storage.
      *
      * @param {{class}}Request $request
-     * @param  string $uuid
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update({{class}}Request $request, $uuid)
+    public function update({{class}}Request $request, $id)
     {
-        ${{model}} = {{class}}::whereUuid($uuid)->first();
+        ${{model}} = {{class}}::whereId($id)->first();
 
         if (!${{model}}) {
             return $this->respondWithErrorNotFound();
@@ -79,12 +79,12 @@ class {{class}}Controller extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string $uuid
+     * @param  int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($uuid)
+    public function destroy($id)
     {
-        ${{model}} = {{class}}::whereUuid($uuid)->first();
+        ${{model}} = {{class}}::whereId($id)->first();
 
         if (!${{model}}) {
             return $this->respondWithErrorNotFound();

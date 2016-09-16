@@ -38,7 +38,7 @@ class RequestGenerator extends AbstractGenerator
         $rules = '';
 
         foreach ($table->columns as $column) {
-            if ($column->name !== 'timestamps') {
+            if ($column->name !== 'timestamps' && $column->name !== 'id' && $column->name !== 'uuid') {
                     $rules .= '\'' . $column->name . '\' => \'required\',' . PHP_EOL . '                    ';
             }
         }
