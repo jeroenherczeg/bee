@@ -77,7 +77,7 @@ abstract class AbstractCommand extends Command
     /**
      * @param $command
      */
-    protected function install($command)
+    protected function runCommand($command)
     {
         $process = new Process($command);
         $process->run();

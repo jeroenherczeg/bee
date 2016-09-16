@@ -13,8 +13,6 @@ use Jeroenherczeg\Bee\Generators\TestGenerator;
 use Jeroenherczeg\Bee\Generators\TransformerGenerator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 /**
  * Class GenerateCommand
@@ -48,7 +46,7 @@ class GenerateCommand extends AbstractCommand
         
         $data = $this->loadScaffold();
 
-        $this->install('composer require league/fractal');
+        $this->runCommand('composer require league/fractal');
 
         $this->configurePHPUnit();
 
@@ -62,6 +60,8 @@ class GenerateCommand extends AbstractCommand
         (new TestGenerator($data, $config, $output))->generate();
         (new RoutesGenerator($data, $config, $output))->generate();
 
+        $this->runCommand('composer dump');
+
         $output->writeln('<comment>And we are done!.</comment>');
     }
     
@@ -74,12 +74,5 @@ class GenerateCommand extends AbstractCommand
         $composer = file_get_contents(getcwd() . '/composer.json');
         $newComposer = str_replace('"App\\": "app/",', '"App\\": "app/",' . PHP_EOL . '            "AppTest\\": "tests/"', $composer);
         file_put_contents(getcwd() . '/composer.json', $newComposer);
-
-        $process = new Process('composer dump');
-        $process->run();
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-        echo $process->getOutput();
     }
 }
