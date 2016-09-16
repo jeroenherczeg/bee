@@ -1,6 +1,6 @@
 <?php
 
-namespace Jeroenherczeg\Bee\Generators;
+namespace Jeroenherczeg\Bee\Generators\Laravel;
 
 /**
  * Class RequestGenerator

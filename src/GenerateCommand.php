@@ -2,15 +2,15 @@
 
 namespace Jeroenherczeg\Bee;
 
-use Jeroenherczeg\Bee\Generators\ControllerGenerator;
-use Jeroenherczeg\Bee\Generators\FactoryGenerator;
-use Jeroenherczeg\Bee\Generators\MigrationGenerator;
-use Jeroenherczeg\Bee\Generators\ModelGenerator;
-use Jeroenherczeg\Bee\Generators\RequestGenerator;
-use Jeroenherczeg\Bee\Generators\RoutesGenerator;
-use Jeroenherczeg\Bee\Generators\SeedGenerator;
-use Jeroenherczeg\Bee\Generators\TestGenerator;
-use Jeroenherczeg\Bee\Generators\TransformerGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\ControllerGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\FactoryGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\MigrationGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\ModelGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\RequestGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\RoutesGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\SeedGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\TestGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\TransformerGenerator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -46,6 +46,10 @@ class GenerateCommand extends AbstractCommand
         
         $data = $this->loadScaffold();
 
+        /**
+         * LARAVEL
+         */
+
         $this->runCommand('composer require league/fractal');
 
         $this->configurePHPUnit();
@@ -62,6 +66,12 @@ class GenerateCommand extends AbstractCommand
 
         $this->runCommand('composer dump');
 
+        /**
+         * VUE
+         */
+
+        $this->installVue();
+
         $output->writeln('<comment>And we are done!.</comment>');
     }
     
@@ -74,5 +84,27 @@ class GenerateCommand extends AbstractCommand
         $composer = file_get_contents(getcwd() . '/composer.json');
         $newComposer = str_replace('"App\\": "app/",', '"App\\": "app/",' . PHP_EOL . '            "AppTest\\": "tests/"', $composer);
         file_put_contents(getcwd() . '/composer.json', $newComposer);
+    }
+
+    public function installVue()
+    {
+        // Remove defaults
+        unlink(getcwd() . '/resources/assets/js/bootstrap.js');
+        unlink(getcwd() . '/resources/assets/js/app.js');
+        unlink(getcwd() . '/resources/assets/js/components/Example.vue');
+
+        // Install
+        $this->runCommand('npm install vue --save');
+        $this->runCommand('npm install vue-resource --save');
+        $this->runCommand('npm install vue-router --save');
+        $this->runCommand('npm install vuex --save');
+
+        mkdir(getcwd() . '/resources/assets/js/views', 0755, true);
+
+        $this->copyFile(__DIR__ . '/../assets/js/app.js', getcwd() . '/resources/assets/js/app.js');
+        $this->copyFile(__DIR__ . '/../assets/js/App.vue', getcwd() . '/resources/assets/js/App.vue');
+        $this->copyFile(__DIR__ . '/../assets/js/views/Home.vue', getcwd() . '/resources/assets/js/views/Home.vue');
+        $this->copyFile(__DIR__ . '/../assets/js/views/NotFound.vue', getcwd() . '/resources/assets/js/views/NotFound.vue');
+
     }
 }
