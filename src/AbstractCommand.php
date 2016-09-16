@@ -4,6 +4,8 @@ namespace Jeroenherczeg\Bee;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 abstract class AbstractCommand extends Command
 {
@@ -61,10 +63,28 @@ abstract class AbstractCommand extends Command
         return (json_last_error() === JSON_ERROR_NONE);
     }
 
+    /**
+     * @param $source
+     * @param $destination
+     */
     protected function copyFile($source, $destination)
     {
         if (!copy($source, $destination)) {
             echo "failed to copy $source...\n";
         }
     }
+
+    /**
+     * @param $command
+     */
+    protected function install($command)
+    {
+        $process = new Process($command);
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+        echo $process->getOutput();
+    }
+
 }

@@ -48,17 +48,9 @@ class GenerateCommand extends AbstractCommand
         
         $data = $this->loadScaffold();
 
-        /**
-         * To do
-         *
-         * composer autoload tests with namsespace
-         *
-         */
-
-        $this->installFractal();
+        $this->install('composer require league/fractal');
 
         $this->configurePHPUnit();
-
 
         (new MigrationGenerator($data, $config, $output))->generate();
         (new ModelGenerator($data, $config, $output))->generate();
@@ -72,24 +64,22 @@ class GenerateCommand extends AbstractCommand
 
         $output->writeln('<comment>And we are done!.</comment>');
     }
-
-    public function installFractal()
+    
+    public function configurePHPUnit()
     {
-        $process = new Process('composer require league/fractal');
+        $this->copyFile(__DIR__ . '/../assets/files/phpunit.xml', getcwd() . '/phpunit.xml');
+        $this->copyFile(__DIR__ . '/../assets/files/database.php', getcwd() . '/config/database.php');
+
+        unlink(getcwd() . '/tests/ExampleTest.php');
+        $composer = file_get_contents(getcwd() . '/composer.json');
+        $newComposer = str_replace('"App\\": "app/",', '"App\\": "app/",' . PHP_EOL . '            "AppTest\\": "tests/"', $composer);
+        file_put_contents(getcwd() . '/composer.json', $newComposer);
+
+        $process = new Process('composer dump');
         $process->run();
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
         echo $process->getOutput();
-    }
-    
-    public function configurePHPUnit()
-    {
-        $this->copyFile(__DIR__ . '/assets/files/phpunit.xml', getcwd() . '/phpunit.xml');
-        $this->copyFile(__DIR__ . '/assets/files/database.php', getcwd() . '/config/database.php');
-        unlink(getcwd() . '/tests/ExampleTest.php');
-        $composer = file_get_contents(getcwd() . '/composer.json');
-        $newComposer = str_replace('"App\\": "app/",', '"App\\": "app/",' . PHP_EOL . '            "AppTest\\": "tests/"', $composer);
-        file_put_contents(getcwd() . '/composer.json', $newComposer);
     }
 }
