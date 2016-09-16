@@ -60,4 +60,11 @@ abstract class AbstractCommand extends Command
 
         return (json_last_error() === JSON_ERROR_NONE);
     }
+
+    protected function copyFile($source, $destination)
+    {
+        if (!copy($source, $destination)) {
+            echo "failed to copy $source...\n";
+        }
+    }
 }

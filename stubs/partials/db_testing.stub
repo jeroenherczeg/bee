@@ -1,0 +1,5 @@
+        'in_memory' => [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ],

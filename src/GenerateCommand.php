@@ -58,8 +58,8 @@ class GenerateCommand extends AbstractCommand
          */
 
         $this->installFractal();
-        
-        $this->copyApiController();
+
+        $this->configurePHPUnit();
 
 
         (new MigrationGenerator($data, $config, $output))->generate();
@@ -85,8 +85,9 @@ class GenerateCommand extends AbstractCommand
         echo $process->getOutput();
     }
     
-    public function copyApiController()
+    public function configurePHPUnit()
     {
-        
+        $this->copyFile(__DIR__ . '/../../assets/files/phpunit.xml', getcwd() . '/phpunit.xml');
+        $this->copyFile(__DIR__ . '/../../assets/files/database.php', getcwd() . '/config/database.php');
     }
 }
