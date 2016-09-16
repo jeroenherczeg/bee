@@ -51,8 +51,6 @@ class GenerateCommand extends AbstractCommand
         /**
          * To do
          *
-         * install fractal
-         * copy base controller
          * composer autoload tests with namsespace
          *
          */
@@ -87,7 +85,11 @@ class GenerateCommand extends AbstractCommand
     
     public function configurePHPUnit()
     {
-        $this->copyFile(__DIR__ . '/../../assets/files/phpunit.xml', getcwd() . '/phpunit.xml');
-        $this->copyFile(__DIR__ . '/../../assets/files/database.php', getcwd() . '/config/database.php');
+        $this->copyFile(__DIR__ . '/assets/files/phpunit.xml', getcwd() . '/phpunit.xml');
+        $this->copyFile(__DIR__ . '/assets/files/database.php', getcwd() . '/config/database.php');
+        unlink(getcwd() . '/tests/ExampleTest.php');
+        $composer = file_get_contents(getcwd() . '/composer.json');
+        $newComposer = str_replace('"App\\": "app/",', '"App\\": "app/",' . PHP_EOL . '            "AppTest\\": "tests/"', $composer);
+        file_put_contents(getcwd() . '/composer.json', $newComposer);
     }
 }
