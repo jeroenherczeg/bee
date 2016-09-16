@@ -56,13 +56,8 @@ class GenerateCommand extends AbstractCommand
          *
          */
 
-        //composer require league/fractal
-        $process = new Process('ls -lsa');
-        $process->run();
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-        echo $process->getOutput();
+        $this->installFractal();
+
 
         (new MigrationGenerator($data, $config, $output))->generate();
         (new ModelGenerator($data, $config, $output))->generate();
@@ -74,5 +69,15 @@ class GenerateCommand extends AbstractCommand
         (new TestGenerator($data, $config, $output))->generate();
 
         $output->writeln('<comment>And we are done!.</comment>');
+    }
+
+    public function installFractal()
+    {
+        $process = new Process('composer require league/fractal');
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+        echo $process->getOutput();
     }
 }
