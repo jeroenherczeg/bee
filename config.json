@@ -13,6 +13,7 @@
             "factory":        "/stubs/factory.stub",
             "migration":      "/stubs/migration.stub",
             "seed":           "/stubs/seed.stub",
+            "basetest":       "/stubs/basetest.stub",
             "test":           "/stubs/test.stub",
             "route":          "/stubs/route.stub",
             "routes":         "/stubs/routes.stub"

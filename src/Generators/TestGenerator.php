@@ -15,6 +15,8 @@ class TestGenerator extends AbstractGenerator
      */
     public function generate()
     {
+        $this->createBaseTest();
+
         $str = new Str();
         $stub = $this->loadFile($this->config->path->stub->test);
 
@@ -35,5 +37,23 @@ class TestGenerator extends AbstractGenerator
 
             $this->output->writeln('<info>Created test: ' . $fileName . '</info>');
         }
+    }
+
+    public function createBaseTest()
+    {
+        $stub = $this->loadFile($this->config->path->stub->basetest);
+
+        $replacements = [
+            'namespace' => $this->config->default->namespace,
+        ];
+
+        $contents = $this->replace($replacements, $stub);
+
+        $fileName = 'TestCase.php';
+        $path = $this->config->path->output->tests;
+
+        $this->saveFile($contents, $fileName, $path);
+
+        $this->output->writeln('<info>Created base test</info>');
     }
 }
