@@ -26,7 +26,7 @@ class SeedGenerator extends AbstractGenerator
             $contents = $this->replace($replacements, $stub);
 
             $fileName = ucfirst($table->name) . 'TableSeeder.php';
-            $path = $this->config->path->output->seeders;
+            $path = $this->config->path->output->seeds;
 
             $this->saveFile($contents, $fileName, $path);
 

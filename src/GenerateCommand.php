@@ -50,6 +50,8 @@ class GenerateCommand extends AbstractCommand
          *
          * install fractal
          * copy base controller
+         * composer autoload tests with namsespace
+         * 
          */
 
         (new MigrationGenerator($data, $config, $output))->generate();
