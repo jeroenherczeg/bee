@@ -7,6 +7,7 @@ use Jeroenherczeg\Bee\Generators\FactoryGenerator;
 use Jeroenherczeg\Bee\Generators\MigrationGenerator;
 use Jeroenherczeg\Bee\Generators\ModelGenerator;
 use Jeroenherczeg\Bee\Generators\RequestGenerator;
+use Jeroenherczeg\Bee\Generators\RoutesGenerator;
 use Jeroenherczeg\Bee\Generators\SeedGenerator;
 use Jeroenherczeg\Bee\Generators\TestGenerator;
 use Jeroenherczeg\Bee\Generators\TransformerGenerator;
@@ -57,6 +58,8 @@ class GenerateCommand extends AbstractCommand
          */
 
         $this->installFractal();
+        
+        $this->copyApiController();
 
 
         (new MigrationGenerator($data, $config, $output))->generate();
@@ -67,6 +70,7 @@ class GenerateCommand extends AbstractCommand
         (new FactoryGenerator($data, $config, $output))->generate();
         (new SeedGenerator($data, $config, $output))->generate();
         (new TestGenerator($data, $config, $output))->generate();
+        (new RoutesGenerator($data, $config, $output))->generate();
 
         $output->writeln('<comment>And we are done!.</comment>');
     }
@@ -79,5 +83,10 @@ class GenerateCommand extends AbstractCommand
             throw new ProcessFailedException($process);
         }
         echo $process->getOutput();
+    }
+    
+    public function copyApiController()
+    {
+        
     }
 }

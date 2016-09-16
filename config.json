@@ -5,24 +5,28 @@
     },
     "path": {
         "stub": {
-            "controller":   "/stubs/controller.stub",
-            "request":      "/stubs/request.stub",
-            "model":        "/stubs/model.stub",
-            "transformer":  "/stubs/transformer.stub",
-            "factory":      "/stubs/factory.stub",
-            "migration":    "/stubs/migration.stub",
-            "seed":         "/stubs/seed.stub",
-            "test":         "/stubs/test.stub"
+            "basecontroller": "/stubs/basecontroller.stub",
+            "controller":     "/stubs/controller.stub",
+            "request":        "/stubs/request.stub",
+            "model":          "/stubs/model.stub",
+            "transformer":    "/stubs/transformer.stub",
+            "factory":        "/stubs/factory.stub",
+            "migration":      "/stubs/migration.stub",
+            "seed":           "/stubs/seed.stub",
+            "test":           "/stubs/test.stub",
+            "route":          "/stubs/route.stub",
+            "routes":         "/stubs/routes.stub"
         },
         "output": {
-            "controllers":  "/app/Http/Controllers/",
-            "requests":     "/app/Http/Requests/",
-            "models":       "/app/Models/Eloquent/",
-            "transformers": "/app/Models/Transformers/",
-            "factories":    "/database/factories/",
-            "migrations":   "/database/migrations/",
-            "seeds":        "/database/seeds/",
-            "tests":        "/tests"
+            "controllers":    "/app/Http/Controllers/",
+            "requests":       "/app/Http/Requests/",
+            "models":         "/app/Models/Eloquent/",
+            "transformers":   "/app/Models/Transformers/",
+            "factories":      "/database/factories/",
+            "migrations":     "/database/migrations/",
+            "seeds":          "/database/seeds/",
+            "tests":          "/tests",
+            "routes":         "/routes"
         }
     }
 }

@@ -1,0 +1,151 @@
+<?php
+
+namespace {{namespace}}\Http\Controllers;
+
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use League\Fractal\Manager as FractalManager;
+use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
+use Illuminate\Routing\Controller as BaseController;
+
+/**
+ * Class Controller
+ * @package {{namespace}}\Http\Controllers
+ */
+class Controller extends BaseController
+{
+    /**
+     * @var int
+     */
+    protected $statusCode = 200;
+
+    /**
+     * Fluent status code setter
+     *
+     * @param $statusCode
+     *
+     * @return $this
+     */
+    public function setStatusCode($statusCode)
+    {
+        $this->statusCode = $statusCode;
+
+        return $this;
+    }
+
+    /**
+     * Basic API response
+     *
+     * @param array $array
+     * @param array $headers
+     *
+     * @return JsonResponse
+     */
+    protected function respondWithArray(array $array, array $headers = [])
+    {
+        return new JsonResponse($array, $this->statusCode, $headers);
+    }
+
+    /**
+     * Basic Message API response
+     *
+     * @param $message
+     *
+     * @return JsonResponse
+     */
+    protected function respondWithMessage($message)
+    {
+        return $this->respondWithArray(['message' => $message]);
+    }
+
+    /**
+     * Basic Error API response
+     *
+     * @param array $errors
+     *
+     * @return JsonResponse
+     */
+    public function respondWithError(array $errors)
+    {
+        return $this->respondWithArray(['errors' => $errors]);
+    }
+
+    /**
+     * OK API response
+     *
+     * @param string $message
+     *
+     * @return JsonResponse
+     */
+    public function respondOk($message = 'The request has succeeded.')
+    {
+        return $this->respondWithMessage($message);
+    }
+
+    /**
+     * Collection API response
+     *
+     * @param $collection
+     * @param $transformer
+     * @param array $includes
+     *
+     * @return JsonResponse
+     */
+    protected function respondWithCollection($collection, $transformer, array $includes = [])
+    {
+        $resource = new Collection($collection, $transformer);
+        $fractal = new FractalManager();
+        $fractal->parseIncludes($includes);
+
+        return $this->respondWithArray($fractal->createData($resource)->toArray());
+    }
+
+    /**
+     * Item API response
+     *
+     * @param $item
+     * @param $transformer
+     * @param array $includes
+     *
+     * @return JsonResponse
+     */
+    protected function respondWithItem($item, $transformer, array $includes = [])
+    {
+        $resource = new Item($item, $transformer);
+        $fractal = new FractalManager();
+        $fractal->parseIncludes($includes);
+
+        return $this->respondWithArray($fractal->createData($resource)->toArray());
+    }
+
+    /**
+     * Item Created API response
+     *
+     * @param $item
+     * @param $transformer
+     * @param array $includes
+     *
+     * @return JsonResponse
+     */
+    public function respondWithCreatedItem($item, $transformer, array $includes = [])
+    {
+        return $this->setStatusCode(Response::HTTP_CREATED)->respondWithItem($item, $transformer, $includes);
+    }
+
+    /**
+     * Error Not Found API response
+     *
+     * @param array $error
+     *
+     * @return mixed
+     */
+    public function respondWithErrorNotFound($error = null)
+    {
+        if (is_null($error)) {
+            $error = [trans('errors.not_found')];
+        }
+
+        return $this->setStatusCode(Response::HTTP_NOT_FOUND)->respondWithError($error);
+    }
+}
