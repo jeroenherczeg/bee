@@ -92,7 +92,6 @@ abstract class AbstractCommand extends Command
      * @param $dst
      */
     protected function rcopy($src, $dst) {
-        if (file_exists($dst)) rrmdir($dst);
         if (is_dir($src)) {
             mkdir($dst);
             $files = scandir($src);
