@@ -16,7 +16,7 @@ class ActionGenerator extends AbstractGenerator
      */
     public function generate()
     {
-        $stub = $this->loadFile($this->config->path->stub->vue->action);
+        $stub = $this->loadFile($this->config->path->stub->vue->actions);
 
         $replacements = [
             'apis' => $this->buildApis(),
