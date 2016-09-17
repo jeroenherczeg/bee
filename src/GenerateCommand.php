@@ -111,13 +111,7 @@ class GenerateCommand extends AbstractCommand
         $this->copyFile(__DIR__ . '/../assets/files/package.json', getcwd() . '/package.json');
         $this->copyFile(__DIR__ . '/../assets/files/gulpfile.js', getcwd() . '/gulpfile.js');
 
-        mkdir(getcwd() . '/resources/assets/less', 0755, true);
-
         $this->rcopy(__DIR__ . '/../assets/less', getcwd() . '/resources/assets/less');
-
-
-
-
 
         //$this->runCommand('npm install');
         //
