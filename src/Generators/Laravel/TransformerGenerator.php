@@ -1,6 +1,7 @@
 <?php
 
 namespace Jeroenherczeg\Bee\Generators\Laravel;
+use Jeroenherczeg\Bee\Generators\AbstractGenerator;
 
 /**
  * Class TransformerGenerator

@@ -3,6 +3,7 @@
 namespace Jeroenherczeg\Bee\Generators\Laravel;
 
 use Illuminate\Support\Str;
+use Jeroenherczeg\Bee\Generators\AbstractGenerator;
 
 /**
  * Class MigrationGenerator
@@ -33,6 +34,10 @@ class MigrationGenerator extends AbstractGenerator
             $this->saveFile($contents, $fileName, $path);
 
             $this->output->writeln('<info>Created migration: ' . $fileName . '</info>');
+
+            if (strtolower($table->name) == 'user') {
+
+            }
         }
     }
     
@@ -50,6 +55,9 @@ class MigrationGenerator extends AbstractGenerator
                 case 'description':
                     $schema .= '$table->text(\'' . $column->name . '\')';
                     break;
+                case 'remember_token':
+                    $schema .= '$table->rememberToken()';
+                    break;
                 case 'timestamps':
                     $schema .= '$table->timestamps()';
                     break;
@@ -60,6 +68,12 @@ class MigrationGenerator extends AbstractGenerator
             if (isset($column->modifiers)) {
                 if (isset($column->modifiers->nullable)) {
                     $schema .= '->nullable()';
+                }
+                if (isset($column->modifiers->unique)) {
+                    $schema .= '->unique()';
+                }
+                if (isset($column->modifiers->index)) {
+                    $schema .= '->index()';
                 }
                 if (isset($column->modifiers->default)) {
                     $schema .= '->default(';

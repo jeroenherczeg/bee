@@ -1,6 +1,7 @@
 <?php
 
 namespace Jeroenherczeg\Bee\Generators\Laravel;
+use Jeroenherczeg\Bee\Generators\AbstractGenerator;
 
 /**
  * Class ModelGenerator
@@ -14,16 +15,22 @@ class ModelGenerator extends AbstractGenerator
     public function generate()
     {
         $stub = $this->loadFile($this->config->path->stub->model);
+        $stubUser = $this->loadFile($this->config->path->stub->user);
 
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
                 'namespace' => $this->config->default->namespace,
                 'class' =>  ucfirst($table->name),
-                'fillable_fields' => $this->buildFillableFields($table)
+                'fillable_fields' => $this->buildFillableFields($table),
+                'hidden_fields' => $this->buildHiddenFields($table),
             ];
 
-            $contents = $this->replace($replacements, $stub);
-
+            if (strtolower($table->name) == 'user') {
+                $contents = $this->replace($replacements, $stubUser);
+            } else {
+                $contents = $this->replace($replacements, $stub);
+            }
+            
             $fileName = ucfirst($table->name) . '.php';
             $path = $this->config->path->output->models;
 
@@ -48,6 +55,20 @@ class ModelGenerator extends AbstractGenerator
             }
 
             $fields .= PHP_EOL . '        ';
+        }
+
+        return $fields;
+    }
+
+    private function buildHiddenFields($table)
+    {
+        $fields = '';
+
+        foreach ($table->columns as $column) {
+            if ($column->name == 'password' || $column->name == 'remember_token') {
+                $fields .= '\'' . $column->name . '\',';
+                $fields .= PHP_EOL . '        ';
+            }
         }
 
         return $fields;

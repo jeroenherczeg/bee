@@ -23,6 +23,11 @@ router.map({
     }
 })
 
+router.beforeEach(function (transition) {
+    window.scrollTo(0, 0)
+    transition.next()
+})
+
 window.addEventListener('load', function () {
     router.start(App, '#app')
 })

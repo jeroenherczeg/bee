@@ -9,6 +9,7 @@
             "controller":     "/stubs/controller.stub",
             "request":        "/stubs/request.stub",
             "model":          "/stubs/model.stub",
+            "user":           "/stubs/user.stub",
             "transformer":    "/stubs/transformer.stub",
             "factory":        "/stubs/factory.stub",
             "migration":      "/stubs/migration.stub",

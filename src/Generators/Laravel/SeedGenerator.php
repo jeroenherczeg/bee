@@ -3,6 +3,7 @@
 namespace Jeroenherczeg\Bee\Generators\Laravel;
 
 use Illuminate\Support\Str;
+use Jeroenherczeg\Bee\Generators\AbstractGenerator;
 
 /**
  * Class SeedGenerator

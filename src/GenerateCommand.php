@@ -68,17 +68,17 @@ class GenerateCommand extends AbstractCommand
 
         $this->runCommand('./vendor/bin/phpunit');
 
-        
+        $this->runCommand('php artisan storage:link');
+
+        //$this->runCommand('npm install');
+        //
+        //$this->runCommand('gulp');
 
         $output->writeln('<comment>And we are done!.</comment>');
     }
     
     public function configurePHPUnit()
     {
-        //$this->copyFile(__DIR__ . '/../assets/files/phpunit.xml', getcwd() . '/phpunit.xml');
-        //$this->copyFile(__DIR__ . '/../assets/files/database.php', getcwd() . '/config/database.php');
-
-        unlink(getcwd() . '/tests/ExampleTest.php');
         $composer = file_get_contents(getcwd() . '/composer.json');
         $newComposer = str_replace('"App\\": "app/",', '"App\\": "app/",' . PHP_EOL . '            "AppTest\\": "tests/"', $composer);
         file_put_contents(getcwd() . '/composer.json', $newComposer);
@@ -95,22 +95,15 @@ class GenerateCommand extends AbstractCommand
         unlink(getcwd() . '/resources/assets/sass/_variables.scss');
         rmdir(getcwd() . '/resources/assets/sass/');
 
-        // Install
+        unlink(getcwd() . '/resources/views/errors/503.blade.php');
+        unlink(getcwd() . '/resources/views/vendor/.gitkeep');
+        rmdir(getcwd() . '/resources/views/errors/');
+        rmdir(getcwd() . '/resources/views/vendor/');
 
-        //mkdir(getcwd() . '/resources/assets/js/views', 0755, true);
-        //
-        //$this->copyFile(__DIR__ . '/../assets/js/app.js', getcwd() . '/resources/assets/js/app.js');
-        //$this->copyFile(__DIR__ . '/../assets/js/App.vue', getcwd() . '/resources/assets/js/App.vue');
-        //$this->copyFile(__DIR__ . '/../assets/js/views/Home.vue', getcwd() . '/resources/assets/js/views/Home.vue');
-        //$this->copyFile(__DIR__ . '/../assets/js/views/NotFound.vue', getcwd() . '/resources/assets/js/views/NotFound.vue');
-        //
-        //$this->copyFile(__DIR__ . '/../assets/files/package.json', getcwd() . '/package.json');
-        //$this->copyFile(__DIR__ . '/../assets/files/gulpfile.js', getcwd() . '/gulpfile.js');
+        unlink(getcwd() . '/tests/ExampleTest.php');
 
-        //$this->rcopy(__DIR__ . '/../assets/less', getcwd() . '/resources/assets/less');
+        unlink(getcwd() . '/app/User.php');
 
-        //$this->runCommand('npm install');
-        //
-        //$this->runCommand('gulp');
+        unlink(getcwd() . '/readme.md');
     }
 }

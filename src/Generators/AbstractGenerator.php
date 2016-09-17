@@ -1,6 +1,6 @@
 <?php
 
-namespace Jeroenherczeg\Bee\Generators\Laravel;
+namespace Jeroenherczeg\Bee\Generators;
 
 /**
  * Class AbstractGenerator
