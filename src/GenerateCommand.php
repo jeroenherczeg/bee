@@ -87,6 +87,10 @@ class GenerateCommand extends AbstractCommand
     public function removeDefaultFiles()
     {
         // Remove defaults
+
+        unlink(getcwd() . '/database/migrations/2014_10_12_000000_create_users_table.php');
+        unlink(getcwd() . '/database/migrations/2014_10_12_100000_create_password_resets_table.php');
+
         unlink(getcwd() . '/resources/assets/js/bootstrap.js');
         unlink(getcwd() . '/resources/assets/js/app.js');
         unlink(getcwd() . '/resources/assets/js/components/Example.vue');
