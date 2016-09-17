@@ -88,8 +88,12 @@ class GenerateCommand extends AbstractCommand
     {
         // Remove defaults
 
+        unlink(getcwd() . '/database/factories/ModelFactory.php');
+
         unlink(getcwd() . '/database/migrations/2014_10_12_000000_create_users_table.php');
         unlink(getcwd() . '/database/migrations/2014_10_12_100000_create_password_resets_table.php');
+
+
 
         unlink(getcwd() . '/resources/assets/js/bootstrap.js');
         unlink(getcwd() . '/resources/assets/js/app.js');

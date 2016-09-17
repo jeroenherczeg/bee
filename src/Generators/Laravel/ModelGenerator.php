@@ -65,12 +65,12 @@ class ModelGenerator extends AbstractGenerator
     {
         $fields = '';
 
-        foreach ($table->columns as $column) {
-            if ($column->name == 'password' || $column->name == 'remember_token') {
-                $fields .= '\'' . $column->name . '\',';
-                $fields .= PHP_EOL . '        ';
-            }
-        }
+        //foreach ($table->columns as $column) {
+        //    if ($column->name == 'password' || $column->name == 'remember_token') {
+        //        $fields .= '\'' . $column->name . '\',';
+        //        $fields .= PHP_EOL . '        ';
+        //    }
+        //}
 
         return $fields;
     }
