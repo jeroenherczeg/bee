@@ -48,7 +48,7 @@ abstract class AbstractGenerator
      */
     protected function loadFile($fileName)
     {
-        return file_get_contents(__DIR__ .'/../../../' . $fileName);
+        return file_get_contents(__DIR__ .'/../..' . $fileName);
     }
 
     /**
