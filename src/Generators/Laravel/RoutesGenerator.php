@@ -44,7 +44,7 @@ class RoutesGenerator extends AbstractGenerator
         $routes = '';
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
-                'class' => ucfirst($table->name),
+                'class' => $this->makeClassName($table->name),
                 'models' => strtolower($str->plural($table->name)),
             ];
 
