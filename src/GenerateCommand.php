@@ -95,6 +95,10 @@ class GenerateCommand extends AbstractCommand
         unlink(getcwd() . '/resources/assets/js/app.js');
         unlink(getcwd() . '/resources/assets/js/components/Example.vue');
 
+        unlink(getcwd() . '/resources/assets/sass/app.scss');
+        unlink(getcwd() . '/resources/assets/sass/_variables.scss');
+        rmdir(getcwd() . '/resources/assets/sass/');
+
         // Install
 
         mkdir(getcwd() . '/resources/assets/js/views', 0755, true);
@@ -105,9 +109,13 @@ class GenerateCommand extends AbstractCommand
         $this->copyFile(__DIR__ . '/../assets/js/views/NotFound.vue', getcwd() . '/resources/assets/js/views/NotFound.vue');
 
         $this->copyFile(__DIR__ . '/../assets/files/package.json', getcwd() . '/package.json');
+        $this->copyFile(__DIR__ . '/../assets/files/gulpfile.js', getcwd() . '/gulpfile.js');
 
-        $this->runCommand('npm install');
+        mkdir(getcwd() . '/resources/assets/less', 0755, true);
+        $this->copyFile(__DIR__ . '/../assets/less/app.less', getcwd() . '/resources/assets/less/app.less');
 
-        $this->runCommand('gulp');
+        //$this->runCommand('npm install');
+        //
+        //$this->runCommand('gulp');
     }
 }
