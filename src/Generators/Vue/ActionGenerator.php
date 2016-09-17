@@ -6,20 +6,21 @@ use Illuminate\Support\Str;
 use Jeroenherczeg\Bee\Generators\AbstractGenerator;
 
 /**
- * Class ApiGenerator
+ * Class ActionGenerator
  * @package Jeroenherczeg\Bee\Generators\Vue
  */
-class ApiGenerator extends AbstractGenerator
+class ActionGenerator extends AbstractGenerator
 {
     /**
      * Generate migrations
      */
     public function generate()
     {
-        $stub = $this->loadFile($this->config->path->stub->vue->api);
+        $stub = $this->loadFile($this->config->path->stub->vue->action);
 
         $replacements = [
-            'api' => $this->buildApi(),
+            'apis' => $this->buildApis(),
+            'actions' => $this->buildActions(),
         ];
 
         $contents = $this->replace($replacements, $stub);
@@ -32,16 +33,28 @@ class ApiGenerator extends AbstractGenerator
         $this->output->writeln('<info>Created vue api: ' . $fileName . '</info>');
     }
 
-    public function buildApi()
+    public function buildApis()
     {
         $str = new Str();
-        $stub = $this->loadFile($this->config->path->stub->vue->partials->api_routes);
+        $actions = '';
+        foreach ($this->data->tables as $index => $table) {
+            $actions .= 'get' . $str->plural($this->makeClassName($table->name)) . ', ';
+        }
+
+        return $actions;
+    }
+
+    public function buildActions()
+    {
+        $str = new Str();
+        $stub = $this->loadFile($this->config->path->stub->vue->partials->action);
 
         $routes = '';
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
                 'class' => $this->makeClassName($table->name),
                 'plural_model' => $str->plural($table->name),
+                'plural_model_caps'=> strtoupper($str->plural($table->name)),
             ];
 
             $routes .= $this->replace($replacements, $stub);

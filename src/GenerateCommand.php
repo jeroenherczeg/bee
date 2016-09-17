@@ -11,6 +11,7 @@ use Jeroenherczeg\Bee\Generators\Laravel\RoutesGenerator;
 use Jeroenherczeg\Bee\Generators\Laravel\SeedGenerator;
 use Jeroenherczeg\Bee\Generators\Laravel\TestGenerator;
 use Jeroenherczeg\Bee\Generators\Laravel\TransformerGenerator;
+use Jeroenherczeg\Bee\Generators\Vue\ActionGenerator;
 use Jeroenherczeg\Bee\Generators\Vue\ApiGenerator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -72,6 +73,7 @@ class GenerateCommand extends AbstractCommand
         $this->runCommand('php artisan storage:link');
 
         (new ApiGenerator($data, $config, $output))->generate();
+        (new ActionGenerator($data, $config, $output))->generate();
 
         //$this->runCommand('npm install');
         //

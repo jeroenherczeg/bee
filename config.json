@@ -22,7 +22,8 @@
                 "partials": {
                     "api_routes": "/stubs/vue/partials/api_routes.stub"
                 },
-                "api":        "/stubs/vue/api.stub"
+                "api":        "/stubs/vue/api.stub",
+                "action":     "/stubs/vue/action.stub"
             }
         },
         "output": {
@@ -37,6 +38,7 @@
             "routes":         "/routes/",
             "vue": {
                 "utilities":  "/resources/assets/js/utilities/"
+                "state":      "/resources/assets/js/state/"
             }
         }
     }

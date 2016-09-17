@@ -3,4 +3,3 @@ export function get{{plural_class}} (cb) {
     response => cb(response.data.data)
   )
 }
-

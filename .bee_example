@@ -1,0 +1,97 @@
+{
+	"tables": [
+		{
+			"name": "user",
+			"columns": [
+				{
+					"name": "id"
+				},
+				{
+					"name": "username",
+					"modifiers": {
+						"unique": true
+					}
+				},
+				{
+					"name": "email",
+					"modifiers": {
+						"unique": true
+					}
+				},
+				{
+					"name": "firstname"
+				},
+				{
+					"name": "lastname"
+				},
+				{
+					"name": "password"
+				},
+				{
+					"name": "remember_token"
+				},
+				{
+					"name": "timestamps"
+				}
+			]
+		},
+		{
+			"name": "password_reset",
+			"columns": [
+				{
+					"name": "id"
+				},
+				{
+					"name": "email",
+					"modifiers": {
+						"unique": true
+					}
+				},
+				{
+					"name": "token"
+				},
+				{
+					"name": "timestamps"
+				}
+			]
+		},
+		{
+			"name": "webshop",
+			"columns": [
+				{
+					"name": "id"
+				},
+				{
+					"name": "url",
+					"modifiers": {
+						"unique": true
+					}
+				},
+				{
+					"name": "slug",
+					"modifiers": {
+						"unique": true
+					}
+				},
+				{
+					"name": "name"
+				},
+				{
+					"name": "description",
+					"modifiers": {
+						"nullable": true
+					}
+				},
+				{
+					"name": "affiliate_url",
+					"modifiers": {
+						"nullable": true
+					}
+				},
+				{
+					"name": "timestamps"
+				}
+			]
+		}
+	]
+}
