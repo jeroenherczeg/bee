@@ -48,7 +48,7 @@ class GenerateCommand extends AbstractCommand
 
         $this->removeDefaultFiles();
 
-        $this->runCommand('cp -R ' . __DIR__ . '/../files ' . getcwd());
+        $this->runCommand('cp -R ' . __DIR__ . '/../files/* ' . getcwd());
 
         $this->runCommand('composer require league/fractal');
 
