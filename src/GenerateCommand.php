@@ -46,9 +46,9 @@ class GenerateCommand extends AbstractCommand
         
         $data = $this->loadScaffold();
 
-        /**
-         * LARAVEL
-         */
+        $this->removeDefaultFiles();
+        
+        $this->rcopy(__DIR__ . '/../files', getcwd());
 
         $this->runCommand('composer require league/fractal');
 
@@ -68,19 +68,15 @@ class GenerateCommand extends AbstractCommand
 
         $this->runCommand('./vendor/bin/phpunit');
 
-        /**
-         * VUE
-         */
-
-        $this->installVue();
+        
 
         $output->writeln('<comment>And we are done!.</comment>');
     }
     
     public function configurePHPUnit()
     {
-        $this->copyFile(__DIR__ . '/../assets/files/phpunit.xml', getcwd() . '/phpunit.xml');
-        $this->copyFile(__DIR__ . '/../assets/files/database.php', getcwd() . '/config/database.php');
+        //$this->copyFile(__DIR__ . '/../assets/files/phpunit.xml', getcwd() . '/phpunit.xml');
+        //$this->copyFile(__DIR__ . '/../assets/files/database.php', getcwd() . '/config/database.php');
 
         unlink(getcwd() . '/tests/ExampleTest.php');
         $composer = file_get_contents(getcwd() . '/composer.json');
@@ -88,7 +84,7 @@ class GenerateCommand extends AbstractCommand
         file_put_contents(getcwd() . '/composer.json', $newComposer);
     }
 
-    public function installVue()
+    public function removeDefaultFiles()
     {
         // Remove defaults
         unlink(getcwd() . '/resources/assets/js/bootstrap.js');
@@ -101,17 +97,17 @@ class GenerateCommand extends AbstractCommand
 
         // Install
 
-        mkdir(getcwd() . '/resources/assets/js/views', 0755, true);
+        //mkdir(getcwd() . '/resources/assets/js/views', 0755, true);
+        //
+        //$this->copyFile(__DIR__ . '/../assets/js/app.js', getcwd() . '/resources/assets/js/app.js');
+        //$this->copyFile(__DIR__ . '/../assets/js/App.vue', getcwd() . '/resources/assets/js/App.vue');
+        //$this->copyFile(__DIR__ . '/../assets/js/views/Home.vue', getcwd() . '/resources/assets/js/views/Home.vue');
+        //$this->copyFile(__DIR__ . '/../assets/js/views/NotFound.vue', getcwd() . '/resources/assets/js/views/NotFound.vue');
+        //
+        //$this->copyFile(__DIR__ . '/../assets/files/package.json', getcwd() . '/package.json');
+        //$this->copyFile(__DIR__ . '/../assets/files/gulpfile.js', getcwd() . '/gulpfile.js');
 
-        $this->copyFile(__DIR__ . '/../assets/js/app.js', getcwd() . '/resources/assets/js/app.js');
-        $this->copyFile(__DIR__ . '/../assets/js/App.vue', getcwd() . '/resources/assets/js/App.vue');
-        $this->copyFile(__DIR__ . '/../assets/js/views/Home.vue', getcwd() . '/resources/assets/js/views/Home.vue');
-        $this->copyFile(__DIR__ . '/../assets/js/views/NotFound.vue', getcwd() . '/resources/assets/js/views/NotFound.vue');
-
-        $this->copyFile(__DIR__ . '/../assets/files/package.json', getcwd() . '/package.json');
-        $this->copyFile(__DIR__ . '/../assets/files/gulpfile.js', getcwd() . '/gulpfile.js');
-
-        $this->rcopy(__DIR__ . '/../assets/less', getcwd() . '/resources/assets/less');
+        //$this->rcopy(__DIR__ . '/../assets/less', getcwd() . '/resources/assets/less');
 
         //$this->runCommand('npm install');
         //
