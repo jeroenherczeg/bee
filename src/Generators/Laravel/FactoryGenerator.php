@@ -55,7 +55,19 @@ class FactoryGenerator extends AbstractGenerator
                     $fields .= '\'' . $column->name . '\' => $faker->url,' . PHP_EOL . '        ';
                     break;
                 case 'email':
-                    $fields .= '\'' . $column->name . '\' => $faker->email,' . PHP_EOL . '        ';
+                    $fields .= '\'' . $column->name . '\' => uniqid() . $faker->email,' . PHP_EOL . '        ';
+                    break;
+                case 'token':
+                    $fields .= '\'' . $column->name . '\' => $faker->sha1,' . PHP_EOL . '        ';
+                    break;
+                case 'username':
+                    $fields .= '\'' . $column->name . '\' => $faker->userName . uniqid(),' . PHP_EOL . '        ';
+                    break;
+                case 'firstname':
+                    $fields .= '\'' . $column->name . '\' => $faker->firstName . uniqid(),' . PHP_EOL . '        ';
+                    break;
+                case 'lastname':
+                    $fields .= '\'' . $column->name . '\' => $faker->lastName . uniqid(),' . PHP_EOL . '        ';
                     break;
                 default:
                     $fields .= '\'' . $column->name . '\' => $faker->sentence,' . PHP_EOL . '        ';
