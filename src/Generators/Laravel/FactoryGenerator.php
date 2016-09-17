@@ -44,8 +44,6 @@ class FactoryGenerator extends AbstractGenerator
             switch ($column->name) {
                 case 'id':
                 case 'timestamps':
-                case 'password':
-                case 'remember_token':
                     break;
                 case 'uuid':
                     $fields .= '\'' . $column->name . '\' => $faker->uuid,' . PHP_EOL . '        ';

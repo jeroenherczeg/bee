@@ -72,7 +72,7 @@ class {{class}}Test extends TestCase
             ->seeStatusCode(201)
             ->seeJsonStructure([
                 'data' => $this->getFields()
-            ])->seeJson(${{model}}Fields);
+            ]);
     }
 
     /**
@@ -98,7 +98,6 @@ class {{class}}Test extends TestCase
             ->seeJsonStructure([
                 'data' => $this->getFields()
             ]);
-        $test->seeJson(${{model}}Fields);
     }
 
     /**
