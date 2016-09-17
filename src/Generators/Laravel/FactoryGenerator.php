@@ -57,6 +57,7 @@ class FactoryGenerator extends AbstractGenerator
                 case 'email':
                     $fields .= '\'' . $column->name . '\' => uniqid() . $faker->email,' . PHP_EOL . '        ';
                     break;
+                case 'remember_token':
                 case 'token':
                     $fields .= '\'' . $column->name . '\' => $faker->sha1,' . PHP_EOL . '        ';
                     break;

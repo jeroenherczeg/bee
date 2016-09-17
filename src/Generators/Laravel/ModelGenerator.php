@@ -23,6 +23,7 @@ class ModelGenerator extends AbstractGenerator
                 'class' =>  $this->makeClassName($table->name),
                 'fillable_fields' => $this->buildFillableFields($table),
                 'hidden_fields' => $this->buildHiddenFields($table),
+                'accessors' => $this->buildAccessors($table),
             ];
 
             if (strtolower($table->name) == 'user') {
@@ -68,6 +69,24 @@ class ModelGenerator extends AbstractGenerator
             if ($column->name == 'password' || $column->name == 'remember_token') {
                 $fields .= '\'' . $column->name . '\',';
                 $fields .= PHP_EOL . '        ';
+            }
+        }
+
+        return $fields;
+    }
+
+    private function buildAccessors($table)
+    {
+        $fields = '';
+
+        foreach ($table->columns as $column) {
+            if ($column->name == 'password') {
+                $fields .= 'public function setPasswordAttribute($value)' . PHP_EOL;
+                $fields .= '{' . PHP_EOL;
+                $fields .= '    if ($value) {' . PHP_EOL;
+                $fields .= '        $this->attributes[\'password\'] = bcrypt($value);' . PHP_EOL;
+                $fields .= '    }' . PHP_EOL;
+                $fields .= '}' . PHP_EOL;
             }
         }
 
