@@ -17,7 +17,13 @@
             "basetest":       "/stubs/basetest.stub",
             "test":           "/stubs/test.stub",
             "route":          "/stubs/route.stub",
-            "routes":         "/stubs/routes.stub"
+            "routes":         "/stubs/routes.stub",
+            "vue": {
+                "partials": {
+                    "api_routes": "/stubs/vue/partials/api_routes.stub"
+                },
+                "api":        "/stubs/vue/api.stub"
+            }
         },
         "output": {
             "controllers":    "/app/Http/Controllers/",
@@ -28,7 +34,10 @@
             "migrations":     "/database/migrations/",
             "seeds":          "/database/seeds/",
             "tests":          "/tests/",
-            "routes":         "/routes/"
+            "routes":         "/routes/",
+            "vue": {
+                "utilities":  "/resources/assets/js/utilities/"
+            }
         }
     }
 }

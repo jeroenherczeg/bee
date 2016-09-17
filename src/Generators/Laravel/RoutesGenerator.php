@@ -30,10 +30,6 @@ class RoutesGenerator extends AbstractGenerator
         $this->saveFile($contents, $fileName, $path);
 
         $this->output->writeln('<info>Created routes: ' . $fileName . '</info>');
-
-        foreach ($this->data->tables as $index => $table) {
-
-        }
     }
 
     public function buildRoutes()
