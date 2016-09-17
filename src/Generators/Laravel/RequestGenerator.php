@@ -19,13 +19,13 @@ class RequestGenerator extends AbstractGenerator
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
                 'namespace' => $this->config->default->namespace,
-                'class' =>  ucfirst($table->name),
+                'class' =>  $this->makeClassName($table->name),
                 'rules' => $this->buildRules($table)
             ];
 
             $contents = $this->replace($replacements, $stub);
 
-            $fileName = ucfirst($table->name) . 'Request.php';
+            $fileName = $this->makeClassName($table->name) . 'Request.php';
             $path = $this->config->path->output->requests;
 
             $this->saveFile($contents, $fileName, $path);

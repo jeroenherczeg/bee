@@ -21,12 +21,12 @@ class SeedGenerator extends AbstractGenerator
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
                 'namespace' => $this->config->default->namespace,
-                'class' => ucfirst($table->name),
+                'class' => $this->makeClassName($table->name),
             ];
 
             $contents = $this->replace($replacements, $stub);
 
-            $fileName = ucfirst($table->name) . 'TableSeeder.php';
+            $fileName = $this->makeClassName($table->name) . 'TableSeeder.php';
             $path = $this->config->path->output->seeds;
 
             $this->saveFile($contents, $fileName, $path);

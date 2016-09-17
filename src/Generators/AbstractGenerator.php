@@ -81,4 +81,13 @@ abstract class AbstractGenerator
 
         file_put_contents($path . $fileName, $data);
     }
+    
+    public function makeClassName($value)
+    {
+        $value = str_replace('_', ' ', $value);
+        $value = ucwords(strtolower($value));
+        $value = str_replace(' ', '', $value);
+
+        return $value;
+    }
 }

@@ -22,13 +22,13 @@ class FactoryGenerator extends AbstractGenerator
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
                 'namespace' => $this->config->default->namespace,
-                'class' => ucfirst($table->name),
+                'class' => $this->makeClassName($table->name),
                 'fields' => $this->buildFields($table)
             ];
 
             $contents = $this->replace($replacements, $stub);
 
-            $fileName = ucfirst($table->name) . 'Factory.php';
+            $fileName = $this->makeClassName($table->name) . 'Factory.php';
             $path = $this->config->path->output->factories;
 
             $this->saveFile($contents, $fileName, $path);

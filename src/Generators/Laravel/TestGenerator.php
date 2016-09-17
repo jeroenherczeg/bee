@@ -24,14 +24,14 @@ class TestGenerator extends AbstractGenerator
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
                 'namespace' => $this->config->default->namespace,
-                'class' => ucfirst($table->name),
+                'class' => $this->makeClassName($table->name),
                 'model' => strtolower($table->name),
                 'models' => strtolower($str->plural($table->name)),
             ];
 
             $contents = $this->replace($replacements, $stub);
 
-            $fileName = ucfirst($table->name) . 'Test.php';
+            $fileName = $this->makeClassName($table->name) . 'Test.php';
             $path = $this->config->path->output->tests;
 
             $this->saveFile($contents, $fileName, $path);

@@ -20,7 +20,7 @@ class ModelGenerator extends AbstractGenerator
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
                 'namespace' => $this->config->default->namespace,
-                'class' =>  ucfirst($table->name),
+                'class' =>  $this->makeClassName($table->name),
                 'fillable_fields' => $this->buildFillableFields($table),
                 'hidden_fields' => $this->buildHiddenFields($table),
             ];
@@ -30,8 +30,8 @@ class ModelGenerator extends AbstractGenerator
             } else {
                 $contents = $this->replace($replacements, $stub);
             }
-            
-            $fileName = ucfirst($table->name) . '.php';
+
+            $fileName = $this->makeClassName($table->name) . '.php';
             $path = $this->config->path->output->models;
 
             $this->saveFile($contents, $fileName, $path);

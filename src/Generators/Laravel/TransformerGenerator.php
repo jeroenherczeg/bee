@@ -19,14 +19,14 @@ class TransformerGenerator extends AbstractGenerator
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
                 'namespace' => $this->config->default->namespace,
-                'class' =>  ucfirst($table->name),
+                'class' =>  $this->makeClassName($table->name),
                 'model' =>  strtolower($table->name),
                 'fields' => $this->buildFields($table)
             ];
 
             $contents = $this->replace($replacements, $stub);
 
-            $fileName = ucfirst($table->name) . 'Transformer.php';
+            $fileName = $this->makeClassName($table->name) . 'Transformer.php';
             $path = $this->config->path->output->transformers;
 
             $this->saveFile($contents, $fileName, $path);
