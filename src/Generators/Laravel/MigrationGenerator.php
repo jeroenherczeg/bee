@@ -21,7 +21,7 @@ class MigrationGenerator extends AbstractGenerator
 
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
-                'class' => 'Create' . $this->makeClassName($table->name) . 'Table',
+                'class' => 'Create' . $str->plural($this->makeClassName($table->name)) . 'Table',
                 'table' =>  strtolower($str->plural($table->name)),
                 'schema_up' => $this->buildSchemaUp($table)
             ];
