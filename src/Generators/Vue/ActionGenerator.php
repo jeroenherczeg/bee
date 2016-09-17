@@ -25,12 +25,12 @@ class ActionGenerator extends AbstractGenerator
 
         $contents = $this->replace($replacements, $stub);
 
-        $fileName = 'api.js';
-        $path = $this->config->path->output->vue->utilities;
+        $fileName = 'actions.js';
+        $path = $this->config->path->output->vue->state;
 
         $this->saveFile($contents, $fileName, $path);
 
-        $this->output->writeln('<info>Created vue api: ' . $fileName . '</info>');
+        $this->output->writeln('<info>Created vue actions: ' . $fileName . '</info>');
     }
 
     public function buildApis()
