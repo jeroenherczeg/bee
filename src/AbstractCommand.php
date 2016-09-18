@@ -40,7 +40,7 @@ abstract class AbstractCommand extends Command
     protected function loadJson($file, $path)
     {
         if (!file_exists($path . $file)) {
-            throw new RuntimeException($file . 'not found!');
+            throw new RuntimeException($file . ' not found!');
         }
 
         $contents = file_get_contents($path . $file);

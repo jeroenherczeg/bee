@@ -32,7 +32,7 @@
                 "store":  "/stubs/vue/store.stub",
                 "getters":  "/stubs/vue/getters.stub",
                 "config":  "/stubs/vue/config.stub",
-                "mutationtypes":  "/stubs/vue/mutationtypes.stub"
+                "mutationtypes":  "/stubs/vue/mutation-types.stub"
             }
         },
         "output": {
