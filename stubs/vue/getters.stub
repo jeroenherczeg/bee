@@ -1,0 +1,13 @@
+export function getUser (state) {
+  return state.user
+}
+
+export function isLoggedIn (state) {
+  return !(state.user == null)
+}
+
+export function isGuest (state) {
+  return (state.user == null)
+}
+
+{{getters}}

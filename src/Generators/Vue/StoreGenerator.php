@@ -38,10 +38,10 @@ class StoreGenerator extends AbstractGenerator
         $store = '';
 
         foreach ($this->data->tables as $index => $table) {
-            $store .= $str->plural(strtolower($table->name)) . ': [],' . PHP_EOL;
+            $store .= $str->plural(strtolower($table->name)) . ': [],' . PHP_EOL . '    ';
         }
 
-        $store = substr($store, 0, -2);
+        $store = substr($store, 0, -6);
 
         return $store;
     }

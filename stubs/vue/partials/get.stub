@@ -1,0 +1,4 @@
+export function get{{plural_class}} (state) {
+  return state.{{plural_model}}
+}
+
