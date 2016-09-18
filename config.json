@@ -5,19 +5,24 @@
     },
     "path": {
         "stub": {
-            "basecontroller": "/stubs/basecontroller.stub",
-            "controller":     "/stubs/controller.stub",
-            "request":        "/stubs/request.stub",
-            "model":          "/stubs/model.stub",
-            "user":           "/stubs/user.stub",
-            "transformer":    "/stubs/transformer.stub",
-            "factory":        "/stubs/factory.stub",
-            "migration":      "/stubs/migration.stub",
-            "seed":           "/stubs/seed.stub",
-            "basetest":       "/stubs/basetest.stub",
-            "test":           "/stubs/test.stub",
-            "route":          "/stubs/route.stub",
-            "routes":         "/stubs/routes.stub",
+            "laravel": {
+                "base": {
+                    "controller": "/stubs/controller.stub",
+                    "test":       "/stubs/test.stub"
+                },
+                "partials": {
+                    "route":          "/stubs/route.stub",
+                },
+                "controller":     "/stubs/controller.stub",
+                "request":        "/stubs/request.stub",
+                "model":          "/stubs/model.stub",
+                "transformer":    "/stubs/transformer.stub",
+                "factory":        "/stubs/factory.stub",
+                "migration":      "/stubs/migration.stub",
+                "seed":           "/stubs/seed.stub",
+                "test":           "/stubs/test.stub",
+                "routes":         "/stubs/routes.stub"
+            },
             "vue": {
                 "partials": {
                     "api_routes":   "/stubs/vue/partials/api_routes.stub",

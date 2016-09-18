@@ -2,30 +2,30 @@
 
 namespace Jeroenherczeg\Bee;
 
-use Jeroenherczeg\Bee\Generators\Laravel\ControllerGenerator;
-use Jeroenherczeg\Bee\Generators\Laravel\FactoryGenerator;
-use Jeroenherczeg\Bee\Generators\Laravel\MigrationGenerator;
-use Jeroenherczeg\Bee\Generators\Laravel\ModelGenerator;
-use Jeroenherczeg\Bee\Generators\Laravel\RequestGenerator;
-use Jeroenherczeg\Bee\Generators\Laravel\RoutesGenerator;
-use Jeroenherczeg\Bee\Generators\Laravel\SeedGenerator;
-use Jeroenherczeg\Bee\Generators\Laravel\TestGenerator;
-use Jeroenherczeg\Bee\Generators\Laravel\TransformerGenerator;
-use Jeroenherczeg\Bee\Generators\Vue\ActionGenerator;
-use Jeroenherczeg\Bee\Generators\Vue\ApiGenerator;
-use Jeroenherczeg\Bee\Generators\Vue\ConfigGenerator;
-use Jeroenherczeg\Bee\Generators\Vue\GetterGenerator;
-use Jeroenherczeg\Bee\Generators\Vue\MutationGenerator;
-use Jeroenherczeg\Bee\Generators\Vue\StoreGenerator;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class GenerateCommand
  * @package Jeroenherczeg\Bee
  */
-class GenerateCommand extends AbstractCommand
+class GenerateCommand extends Command
 {
+    protected $output;
+
+    protected $fs;
+
+    protected $finder;
+
+    protected $projectDir;
+
+    protected $rootDir;
+
+    protected $projectNamespace = 'App';
+
     /**
      * Configure the command options.
      *
@@ -33,7 +33,20 @@ class GenerateCommand extends AbstractCommand
      */
     protected function configure()
     {
-        $this->setName('generate')->setDescription('Scaffold from a .bee scaffolding file');
+        $this->setName('generate')
+             ->setDescription('Scaffold from a .bee scaffolding file');
+    }
+
+    /**
+     * Initializes the command just after the input has been validated.
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $this->output = $output;
+        $this->fs = new Filesystem();
+        $this->finder = new Finder();
+        $this->projectDir = getcwd();
+        $this->rootDir = __DIR__ . '/../';
     }
 
     /**
@@ -45,86 +58,160 @@ class GenerateCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        
-        $output->writeln('<comment>Let\'s get BEEzzzy!</comment>');
+        $this->displayWelcome()
+             ->removeDefaultBoilerplate()
+             ->copyBaseFiles()
+             ->generateCode()
+             ->installDependencies()
+             ->runTests();
 
-        $config = $this->loadConfig();
-        
-        $data = $this->loadScaffold();
+        $this->output->writeln(PHP_EOL . '<comment>Good luck and have fun!</comment>');
+    }
 
-        $this->removeDefaultFiles();
+    private function displayWelcome()
+    {
 
-        $this->runCommand('cp -R ' . __DIR__ . '/../files/* ' . getcwd());
 
-        $this->runCommand('composer require league/fractal');
+        $this->output->writeln('');
+        $this->output->writeln('                ▄████▄');
+        $this->output->writeln('       ▄████▄ ▄██░░░███▄');
+        $this->output->writeln('     ▄██░░░░███░░░░░░░░██▄');
+        $this->output->writeln('     █░░░░░░░░██░░░░░░░░░██▄');
+        $this->output->writeln('     █░░░░░░░░░██░░░░░░░░░██');
+        $this->output->writeln('     █░░░░░░░░░░██░░░░░░░░░█');
+        $this->output->writeln('     █░░░░░░░░░░░█░░░░░░░░░█');
+        $this->output->writeln('     █░░░░░░░░░░░█░░░░░░░░██');
+        $this->output->writeln('     █░░░░░░░░░░░██░░░░░░░█');
+        $this->output->writeln('     █░░░░░░░░░░░░█░░░░░░█');
+        $this->output->writeln('     █░░░░░░░░░░░░█░░░░░██');
+        $this->output->writeln('      █░░░░░░░░░░░█░░░░██  █        █');
+        $this->output->writeln('       ██░░░░░░░░░█░░░░█   █        █');
+        $this->output->writeln('        ███░░░░░░░█░░░░█    █      █');
+        $this->output->writeln('         █████░░░░█░░░███▄   █    █');
+        $this->output->writeln('       ███▒▒▒██████████▒▒█ ▄████████▄');
+        $this->output->writeln('      ██▒▒▒▒███▒▒▒████▒▒▒███░░░░░░░░█');
+        $this->output->writeln('     ▄█▒▒▒▒███▒▒▒▒███▒▒▒▒▒█░░░█░░█░░░█');
+        $this->output->writeln('    ███▒▒▒▒██▒▒▒▒▒██▒▒▒▒▒▒█░░░░░░░░░░█');
+        $this->output->writeln('     ▀█▒▒▒▒██▒▒▒▒▒██▒▒▒▒▒▒█░░█░░░░█░░█');
+        $this->output->writeln('      ██▒▒▒███▒▒▒▒███▒▒▒▒▒█░░░████░░██');
+        $this->output->writeln('       ██▒▒▒███▒▒▒████▒▒▒▒███░░░░░░██');
+        $this->output->writeln('        ██▒▒▒███▒▒▒████▒▒██ ▀▀▀▀▀▀▀▀');
+        $this->output->writeln('         ▀███████████████▀');
+        $this->output->writeln('');
+        $this->output->writeln('Let\'s get to work!');
 
-        $this->configurePHPUnit();
+        return $this;
+    }
 
-        (new MigrationGenerator($data, $config, $output))->generate();
-        (new ModelGenerator($data, $config, $output))->generate();
-        (new ControllerGenerator($data, $config, $output))->generate();
-        (new TransformerGenerator($data, $config, $output))->generate();
-        (new RequestGenerator($data, $config, $output))->generate();
-        (new FactoryGenerator($data, $config, $output))->generate();
-        (new SeedGenerator($data, $config, $output))->generate();
-        (new TestGenerator($data, $config, $output))->generate();
-        (new RoutesGenerator($data, $config, $output))->generate();
+    /**
+     * Remove default files
+     */
+    private function removeDefaultBoilerplate()
+    {
+        $this->output->writeln(PHP_EOL . '<comment>Removing default boilerplate ...</comment>');
 
-        $this->runCommand('composer dump');
+        $defaultBoilerplate = [
+            'database/factories/ModelFactory.php',
+            'database/migrations/2014_10_12_000000_create_users_table.php',
+            'database/migrations/2014_10_12_100000_create_password_resets_table.php',
+            'resources/assets/js/bootstrap.js',
+            'resources/assets/js/app.js',
+            'resources/assets/js/components/Example.vue',
+            'resources/assets/sass/',
+            'resources/views/errors/',
+            'resources/views/vendor/',
+            'tests/ExampleTest.php',
+            'app/User.php',
+            'readme.md',
+        ];
 
-        $this->runCommand('./vendor/bin/phpunit');
+        foreach ($defaultBoilerplate as $boilerplate) {
+            $boilerplateFullPath = $this->projectDir . '/' . $boilerplate;
 
-        $this->runCommand('php artisan storage:link');
+            if (!$this->fs->exists($boilerplateFullPath)) {
+                $this->output->writeln(' - <error>' . $boilerplate . '</error> doesn\'t exists! ');
+                continue;
+            }
 
-        (new ApiGenerator($data, $config, $output))->generate();
-        (new ActionGenerator($data, $config, $output))->generate();
-        (new MutationGenerator($data, $config, $output))->generate();
-        (new GetterGenerator($data, $config, $output))->generate();
-        (new StoreGenerator($data, $config, $output))->generate();
-        (new ConfigGenerator($data, $config, $output))->generate();
+            $this->fs->remove($boilerplateFullPath);
+            $this->output->writeln('<info> - Removed ' . $boilerplate . '</info>');
+        }
 
+        return $this;
+    }
+
+    /**
+     * Copy base files
+     */
+    private function copyBaseFiles()
+    {
+        $this->output->writeln(PHP_EOL . '<comment>Copying base files ...</comment>');
+
+        $this->finder->files()->in($this->rootDir . 'base_files');
+
+        foreach ($this->finder as $file) {
+            $fileFullPath = $file->getFilename();
+
+            if ($file->getRelativePath() != '') {
+                $fileFullPath = $file->getRelativePath() . '/' . $fileFullPath;
+                $this->fs->copy($this->rootDir . $fileFullPath, $this->projectDir . '/' . $fileFullPath);
+            }
+
+            $this->output->writeln('<info> - Copied ' . $fileFullPath . '</info>');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Generating code
+     */
+    private function generateCode()
+    {
+        $this->output->writeln(PHP_EOL . '<comment>Generating code ...</comment>');
+
+        //foreach ($this->tables as $table) {
+        //    LaravelGenerator::generate($table);
+        //    VueGenerator::generate($table);
+        //}
+
+        return $this;
+    }
+
+    /**
+     * Installing dependencies
+     */
+    private function installDependencies()
+    {
+        $this->output->writeln(PHP_EOL . '<comment>Installing dependencies ...</comment>');
+
+        //$composer = file_get_contents(getcwd() . '/composer.json');
+        //$newComposer = str_replace('"App\\": "app/",', '"App\\": "app/",' . PHP_EOL . '            "AppTest\\": "tests/"', $composer);
+        //file_put_contents(getcwd() . '/composer.json', $newComposer);
+        //
+        //$this->runCommand('composer require league/fractal');
+        //
+        //$this->runCommand('composer require laravel/passport');
+        //
+        //$this->runCommand('php artisan storage:link');
+        //
         //$this->runCommand('npm install');
         //
         //$this->runCommand('gulp');
 
-        $output->writeln('<comment>And we are done!.</comment>');
+        return $this;
     }
-    
-    public function configurePHPUnit()
+
+    /**
+     * Running tests
+     */
+    private function runTests()
     {
-        $composer = file_get_contents(getcwd() . '/composer.json');
-        $newComposer = str_replace('"App\\": "app/",', '"App\\": "app/",' . PHP_EOL . '            "AppTest\\": "tests/"', $composer);
-        file_put_contents(getcwd() . '/composer.json', $newComposer);
+        $this->output->writeln(PHP_EOL . '<comment>Running tests ...</comment>');
+        //
+        //$this->runCommand('./vendor/bin/phpunit');
+        //
+        return $this;
     }
 
-    public function removeDefaultFiles()
-    {
-        // Remove defaults
-
-        unlink(getcwd() . '/database/factories/ModelFactory.php');
-
-        unlink(getcwd() . '/database/migrations/2014_10_12_000000_create_users_table.php');
-        unlink(getcwd() . '/database/migrations/2014_10_12_100000_create_password_resets_table.php');
-
-
-
-        unlink(getcwd() . '/resources/assets/js/bootstrap.js');
-        unlink(getcwd() . '/resources/assets/js/app.js');
-        unlink(getcwd() . '/resources/assets/js/components/Example.vue');
-
-        unlink(getcwd() . '/resources/assets/sass/app.scss');
-        unlink(getcwd() . '/resources/assets/sass/_variables.scss');
-        rmdir(getcwd() . '/resources/assets/sass/');
-
-        unlink(getcwd() . '/resources/views/errors/503.blade.php');
-        unlink(getcwd() . '/resources/views/vendor/.gitkeep');
-        rmdir(getcwd() . '/resources/views/errors/');
-        rmdir(getcwd() . '/resources/views/vendor/');
-
-        unlink(getcwd() . '/tests/ExampleTest.php');
-
-        unlink(getcwd() . '/app/User.php');
-
-        unlink(getcwd() . '/readme.md');
-    }
 }

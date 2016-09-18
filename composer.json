@@ -17,7 +17,9 @@
     "require": {
         "symfony/console": "~2.3|~3.0",
         "symfony/process": "~2.3|~3.0",
-        "illuminate/support": "^5.3"
+        "illuminate/support": "^5.3",
+        "symfony/filesystem": "^3.1",
+        "symfony/finder": "^3.1"
     },
     "bin": [
         "bee"

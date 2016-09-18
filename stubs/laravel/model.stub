@@ -2,13 +2,10 @@
 
 namespace {{namespace}}\Models\Eloquent;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class {{class}} extends Model
 {
-    use Notifiable;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -24,7 +21,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        {{hidden_fields}}
     ];
 
     /*
@@ -38,8 +34,6 @@ class User extends Authenticatable
     | Accessors & Mutators
     |--------------------------------------------------------------------------
     */
-
-    {{accessors}}
 
     /*
     |--------------------------------------------------------------------------
