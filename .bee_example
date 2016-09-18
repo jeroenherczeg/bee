@@ -1,4 +1,10 @@
 {
+	"env": {
+		"dev": {
+			"site": "http://bee.dev",
+			"api": "http://bee.dev/api/"
+		}
+	},
 	"tables": [
 		{
 			"name": "user",

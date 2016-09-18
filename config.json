@@ -30,7 +30,9 @@
                 "actions":    "/stubs/vue/actions.stub",
                 "mutations":  "/stubs/vue/mutations.stub",
                 "store":  "/stubs/vue/store.stub",
-                "getters":  "/stubs/vue/getters.stub"
+                "getters":  "/stubs/vue/getters.stub",
+                "config":  "/stubs/vue/config.stub",
+                "mutationtypes":  "/stubs/vue/mutationtypes.stub"
             }
         },
         "output": {
@@ -45,7 +47,8 @@
             "routes":         "/routes/",
             "vue": {
                 "utilities":  "/resources/assets/js/utilities/",
-                "state":      "/resources/assets/js/state/"
+                "state":      "/resources/assets/js/state/",
+                "root":      "/resources/assets/js/"
             }
         }
     }

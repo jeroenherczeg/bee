@@ -17,7 +17,7 @@ class MutationGenerator extends AbstractGenerator
     public function generate()
     {
         $str = new Str();
-        
+
         // Mutation
         $stub = $this->loadFile($this->config->path->stub->vue->mutations);
         
@@ -37,18 +37,13 @@ class MutationGenerator extends AbstractGenerator
 
 
         // Mutation types
-        $stub = $this->loadFile($this->config->path->stub->vue->partials->mutationtype);
+        $stub = $this->loadFile($this->config->path->stub->vue->mutationtypes);
 
-        $contents = '';
+        $replacements = [
+            'types' => $this->buildMutationTypes(),
+        ];
 
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'plural_models_caps'=> strtoupper($str->plural($table->name)),
-            ];
-
-            $contents .= $this->replace($replacements, $stub) . PHP_EOL;
-
-        }
+        $contents = $this->replace($replacements, $stub) . PHP_EOL;
 
         $fileName = 'mutation-types.js';
         $path = $this->config->path->output->vue->state;
@@ -77,5 +72,24 @@ class MutationGenerator extends AbstractGenerator
         $mutations = substr($mutations, 0, -2);
 
         return $mutations;
+    }
+
+    public function buildMutationTypes()
+    {
+        $str = new Str();
+
+        $stub = $this->loadFile($this->config->path->stub->vue->partials->mutationtype);
+
+        $contents = '';
+
+        foreach ($this->data->tables as $index => $table) {
+            $replacements = [
+                'plural_models_caps'=> strtoupper($str->plural($table->name)),
+            ];
+
+            $contents .= $this->replace($replacements, $stub) . PHP_EOL;
+
+        }
+        return $contents;
     }
 }

@@ -1,0 +1,2 @@
+export const SITE_ROOT = '{{site_root}}'
+export const API_ROOT = '{{api_root}}'

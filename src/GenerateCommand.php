@@ -13,6 +13,7 @@ use Jeroenherczeg\Bee\Generators\Laravel\TestGenerator;
 use Jeroenherczeg\Bee\Generators\Laravel\TransformerGenerator;
 use Jeroenherczeg\Bee\Generators\Vue\ActionGenerator;
 use Jeroenherczeg\Bee\Generators\Vue\ApiGenerator;
+use Jeroenherczeg\Bee\Generators\Vue\ConfigGenerator;
 use Jeroenherczeg\Bee\Generators\Vue\GetterGenerator;
 use Jeroenherczeg\Bee\Generators\Vue\MutationGenerator;
 use Jeroenherczeg\Bee\Generators\Vue\StoreGenerator;
@@ -80,6 +81,7 @@ class GenerateCommand extends AbstractCommand
         (new MutationGenerator($data, $config, $output))->generate();
         (new GetterGenerator($data, $config, $output))->generate();
         (new StoreGenerator($data, $config, $output))->generate();
+        (new ConfigGenerator($data, $config, $output))->generate();
 
         //$this->runCommand('npm install');
         //
