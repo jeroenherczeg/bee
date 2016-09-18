@@ -1,1 +1,1 @@
-export const SET_{{model_caps}} = 'SET_{{model_caps}}'
+export const SET_{{plural_model_caps}} = 'SET_{{model_caps}}'

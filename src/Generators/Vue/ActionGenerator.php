@@ -19,7 +19,6 @@ class ActionGenerator extends AbstractGenerator
         $stub = $this->loadFile($this->config->path->stub->vue->actions);
 
         $replacements = [
-            'apis' => $this->buildApis(),
             'actions' => $this->buildActions(),
         ];
 
@@ -33,25 +32,12 @@ class ActionGenerator extends AbstractGenerator
         $this->output->writeln('<info>Created vue actions: ' . $fileName . '</info>');
     }
 
-    public function buildApis()
-    {
-        $str = new Str();
-        $actions = '';
-        foreach ($this->data->tables as $index => $table) {
-            $actions .= 'get' . $str->plural($this->makeClassName($table->name)) . ', ';
-        }
-
-        $actions = substr($actions, 0, -2);
-
-        return $actions;
-    }
-
     public function buildActions()
     {
         $str = new Str();
         $stub = $this->loadFile($this->config->path->stub->vue->partials->action);
 
-        $routes = '';
+        $actions = '';
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
                 'plural_class' => $str->plural($this->makeClassName($table->name)),
@@ -59,10 +45,10 @@ class ActionGenerator extends AbstractGenerator
                 'plural_model_caps'=> strtoupper($str->plural($table->name)),
             ];
 
-            $routes .= $this->replace($replacements, $stub);
-            $routes .= PHP_EOL;
+            $actions .= $this->replace($replacements, $stub);
+            $actions .= PHP_EOL;
         }
 
-        return $routes;
+        return $actions;
     }
 }

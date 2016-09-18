@@ -1,3 +1,3 @@
 export const update{{plural_class}} = ({ dispatch }) => {
-    get{{plural_class}}(({{plural_model}}) => dispatch(types.SET_{{plural_model_caps}}, {{plural_model}}))
+    api.get{{plural_class}}(({{plural_model}}) => dispatch(types.SET_{{plural_model_caps}}, {{plural_model}}))
 }

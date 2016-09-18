@@ -27,7 +27,8 @@
                 },
                 "api":        "/stubs/vue/api.stub",
                 "actions":    "/stubs/vue/actions.stub",
-                "mutations":  "/stubs/vue/mutations.stub"
+                "mutations":  "/stubs/vue/mutations.stub",
+                "store":  "/stubs/vue/store.stub"
             }
         },
         "output": {

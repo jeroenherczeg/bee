@@ -1,4 +1,4 @@
 import * as types from './mutation-types'
-import { {{apis}} } from '../utilities/api'
+import * as api from '../utilities/api'
 
 {{actions}}
