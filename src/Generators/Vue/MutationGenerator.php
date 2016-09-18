@@ -2,6 +2,7 @@
 
 namespace Jeroenherczeg\Bee\Generators\Vue;
 
+use Illuminate\Support\Str;
 use Jeroenherczeg\Bee\Generators\AbstractGenerator;
 
 /**
@@ -22,7 +23,7 @@ class MutationGenerator extends AbstractGenerator
             'mutations' => $this->buildMutations(),
         ];
 
-        $contents .= $this->replace($replacements, $stub) . PHP_EOL;
+        $contents = $this->replace($replacements, $stub) . PHP_EOL;
 
         $fileName = 'mutations.js';
         $path = $this->config->path->output->vue->state;
