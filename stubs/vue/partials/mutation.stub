@@ -1,0 +1,3 @@
+[types.SET_{{plural_models_caps}}]: (state, {{plural_models}}) => {
+    state.{{plural_models}} = {{plural_models}}
+},

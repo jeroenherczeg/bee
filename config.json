@@ -20,11 +20,14 @@
             "routes":         "/stubs/routes.stub",
             "vue": {
                 "partials": {
-                    "api_routes": "/stubs/vue/partials/api_routes.stub",
-                    "action":     "/stubs/vue/partials/action.stub"
+                    "api_routes":    "/stubs/vue/partials/api_routes.stub",
+                    "action":        "/stubs/vue/partials/action.stub",
+                    "mutation-type": "/stubs/vue/partials/mutation-type.stub",
+                    "mutation":      "/stubs/vue/partials/mutation.stub"
                 },
                 "api":        "/stubs/vue/api.stub",
-                "actions":     "/stubs/vue/actions.stub"
+                "actions":    "/stubs/vue/actions.stub",
+                "mutations":  "/stubs/vue/mutations.stub"
             }
         },
         "output": {

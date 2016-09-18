@@ -13,6 +13,7 @@ use Jeroenherczeg\Bee\Generators\Laravel\TestGenerator;
 use Jeroenherczeg\Bee\Generators\Laravel\TransformerGenerator;
 use Jeroenherczeg\Bee\Generators\Vue\ActionGenerator;
 use Jeroenherczeg\Bee\Generators\Vue\ApiGenerator;
+use Jeroenherczeg\Bee\Generators\Vue\MutationGenerator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -74,6 +75,7 @@ class GenerateCommand extends AbstractCommand
 
         (new ApiGenerator($data, $config, $output))->generate();
         (new ActionGenerator($data, $config, $output))->generate();
+        (new MutationGenerator($data, $config, $output))->generate();
 
         //$this->runCommand('npm install');
         //

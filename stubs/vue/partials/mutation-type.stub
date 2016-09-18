@@ -1,0 +1,1 @@
+export const SET_{{model_caps}} = 'SET_{{model_caps}}'
