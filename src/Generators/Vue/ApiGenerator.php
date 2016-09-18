@@ -40,7 +40,7 @@ class ApiGenerator extends AbstractGenerator
         $routes = '';
         foreach ($this->data->tables as $index => $table) {
             $replacements = [
-                'class' => $this->makeClassName($table->name),
+                'plural_class' => $str->plural($this->makeClassName($table->name)),
                 'plural_model' => $str->plural($table->name),
             ];
 
