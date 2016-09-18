@@ -1,4 +1,37 @@
 import Vue from 'vue'
 import { API_ROOT } from './config'
 
+export function login (form, cb) {
+  sendFormRequest('post', API_ROOT + 'oauth/access_token', form, cb)
+}
+
+export function getUser (cb) {
+  Vue.http.get(API_ROOT + '/users/me').then(
+    response => cb(response.data.data)
+  )
+}
+
 {{api}}
+
+/**
+ * Helper function for forms
+ *
+ * @param method
+ * @param uri
+ * @param form
+ * @param cb
+ */
+export function sendFormRequest (method, uri, form, cb) {
+  form.startProcessing()
+
+  Vue.http[method](uri, form.data).then(
+    response => {
+      form.finishProcessing()
+      cb(response.data)
+    },
+    errors => {
+      form.errors.set(errors.data.errors)
+      form.busy = false
+    }
+  )
+}
