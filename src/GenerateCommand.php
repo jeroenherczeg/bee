@@ -24,6 +24,10 @@ class GenerateCommand extends Command
 
     protected $rootDir;
 
+    protected $baseFilesDir;
+
+    protected $stubFilesDir;
+
     protected $projectNamespace = 'App';
 
     /**
@@ -47,6 +51,8 @@ class GenerateCommand extends Command
         $this->finder = new Finder();
         $this->projectDir = getcwd();
         $this->rootDir = __DIR__ . '/../';
+        $this->baseFilesDir = $this->rootDir . 'base_files/';
+        $this->stubFilesDir = $this->rootDir . 'stubs/';
     }
 
     /**
@@ -147,7 +153,7 @@ class GenerateCommand extends Command
     {
         $this->output->writeln(PHP_EOL . '<comment>Copying base files ...</comment>');
 
-        $this->finder->files()->in($this->rootDir . 'base_files');
+        $this->finder->files()->in($this->baseFilesDir);
 
         foreach ($this->finder as $file) {
             $fileFullPath = $file->getFilename();
@@ -156,7 +162,7 @@ class GenerateCommand extends Command
                 $fileFullPath = $file->getRelativePath() . '/' . $fileFullPath;
             }
 
-            $this->fs->copy($this->rootDir . $fileFullPath, $this->projectDir . '/' . $fileFullPath);
+            $this->fs->copy($this->baseFilesDir . $fileFullPath, $this->projectDir . '/' . $fileFullPath);
             $this->output->writeln('<info> - Copied ' . $fileFullPath . '</info>');
         }
 
