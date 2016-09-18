@@ -154,9 +154,9 @@ class GenerateCommand extends Command
 
             if ($file->getRelativePath() != '') {
                 $fileFullPath = $file->getRelativePath() . '/' . $fileFullPath;
-                $this->fs->copy($this->rootDir . $fileFullPath, $this->projectDir . '/' . $fileFullPath);
             }
 
+            $this->fs->copy($this->rootDir . $fileFullPath, $this->projectDir . '/' . $fileFullPath);
             $this->output->writeln('<info> - Copied ' . $fileFullPath . '</info>');
         }
 
