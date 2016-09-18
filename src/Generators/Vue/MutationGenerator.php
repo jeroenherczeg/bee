@@ -35,7 +35,7 @@ class MutationGenerator extends AbstractGenerator
 
 
         // Mutation types
-        $stub = $this->loadFile($this->config->path->stub->vue->partials->mutation-type);
+        $stub = $this->loadFile($this->config->path->stub->vue->partials->mutationtype);
 
         $contents = '';
 
