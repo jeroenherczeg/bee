@@ -5,7 +5,7 @@ namespace Jeroenherczeg\Bee\Generators;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\ValueObject\Config;
+use Jeroenherczeg\Bee\ValueObjects\Config;
 
 
 /**
