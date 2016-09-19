@@ -100,7 +100,7 @@ class GenerateCommand extends Command
         $this->output->writeln('        ██▒▒▒███▒▒▒████▒▒██ ▀▀▀▀▀▀▀▀');
         $this->output->writeln('         ▀███████████████▀');
         $this->output->writeln('');
-        $this->output->writeln('Let\'s get to work!');
+        $this->output->writeln('          Let\'s get to work!');
 
         return $this;
     }
@@ -156,7 +156,9 @@ class GenerateCommand extends Command
 
             if ($file->getRelativePath() != '') {
                 $fileFullPath = $file->getRelativePath() . '/' . $fileFullPath;
-                $this->fs->makeDirectory($file->getRelativePath(), 0755, true);
+                if (!$this->fs->isDirectory($this->config->getProjectDir() . '/' . $file->getRelativePath())) {
+                    $this->fs->makeDirectory($this->config->getProjectDir() . '/' . $file->getRelativePath()), 0755, true);
+                }
             }
 
             $this->fs->copy($this->config->getBaseFilesDir() . $fileFullPath, $this->config->getProjectDir() . '/' . $fileFullPath);
