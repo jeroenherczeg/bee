@@ -19,7 +19,7 @@ class Config
     /**
      * @var
      */
-    protected $basesFileDir;
+    protected $basesFilesDir;
 
     /**
      * @var string
