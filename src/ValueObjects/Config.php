@@ -19,7 +19,7 @@ class Config
     /**
      * @var
      */
-    protected $baseFileDir;
+    protected $basesFileDir;
 
     /**
      * @var string
@@ -38,7 +38,7 @@ class Config
     {
         $this->projectDir = getcwd();
 
-        $this->baseFileDir = __DIR__ . '/../../';
+        $this->baseFilesDir = __DIR__ . '/../../';
 
         $fs = new Filesystem();
         $config = $fs->get($this->projectDir . '/.bee');
@@ -78,9 +78,9 @@ class Config
     /**
      * @return string
      */
-    public function getBaseFileDir()
+    public function getBaseFilesDir()
     {
-        return $this->baseFileDir;
+        return $this->baseFilesDir;
     }
 
     /**

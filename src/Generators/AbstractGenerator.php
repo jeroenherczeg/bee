@@ -4,9 +4,7 @@ namespace Jeroenherczeg\Bee\Generators;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Jeroenherczeg\Bee\ValueObjects\Config;
-
 
 /**
  * Class AbstractGenerator
@@ -25,11 +23,6 @@ abstract class AbstractGenerator
     protected $fs;
 
     /**
-     * @var Str
-     */
-    protected $str;
-
-    /**
      * @var array
      */
     protected $results = [];
@@ -44,7 +37,6 @@ abstract class AbstractGenerator
     {
         $this->config = new Config();
         $this->fs = new Filesystem();
-        $this->str = new Str();
     }
 
     /**
@@ -79,7 +71,7 @@ abstract class AbstractGenerator
      *
      * @return string
      */
-    protected function replace(Collection $replacements, $stub)
+    protected function replace($replacements, $stub)
     {
         foreach ($replacements as $key => $value) {
             $stub = str_replace('{{' . $key . '}}', $value, $stub);

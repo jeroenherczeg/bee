@@ -2,49 +2,70 @@
 
 namespace Jeroenherczeg\Bee\Generators\Laravel;
 
-use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\CombinedGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class RoutesGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
-class RoutesGenerator extends AbstractGenerator
+class RoutesGenerator extends CombinedGenerator
 {
+
     /**
-     * Generate migrations
+     * @var string
      */
-    public function generate()
+    protected $partialStub = 'laravel/partials/route.stub';
+
+    /**
+     * @return string
+     */
+    protected function getStubPath()
     {
-        $stub = $this->loadFile($this->config->path->stub->routes);
-        
-        $replacements = [
-            'routes' => $this->buildRoutes(),
-        ];
-
-        $contents = $this->replace($replacements, $stub);
-
-        $fileName = 'api.php';
-        $path = $this->config->path->output->routes;
-
-        $this->saveFile($contents, $fileName, $path);
-
-        $this->output->writeln('<info>Created routes: ' . $fileName . '</info>');
+        return 'laravel/routes.stub';
     }
 
-    public function buildRoutes()
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
     {
-        $str = new Str();
-        $stub = $this->loadFile($this->config->path->stub->route);
+        return 'routes/';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($tables)
+    {
+        return [
+            'routes' => $this->buildRoutes($tables),
+        ];
+    }
+
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return 'api.php';
+    }
+    
+    
+    public function buildRoutes($tables)
+    {
+        $partialContent = $this->fs->get($this->partialStub);
 
         $routes = '';
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'class' => $this->makeClassName($table->name),
-                'models' => strtolower($str->plural($table->name)),
-            ];
 
-            $routes .= $this->replace($replacements, $stub);
+        foreach ($tables as $table) {
+            $replacements = (new Replacements($table))->getReplacements();
+            
+            $routes .= $this->replace($replacements, $partialContent);
             $routes .= PHP_EOL;
         }
 

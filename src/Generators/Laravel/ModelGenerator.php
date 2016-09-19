@@ -3,6 +3,7 @@
 namespace Jeroenherczeg\Bee\Generators\Laravel;
 
 use Jeroenherczeg\Bee\Generators\SingleGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class ModelGenerator
@@ -33,9 +34,11 @@ class ModelGenerator extends SingleGenerator
      */
     protected function getReplacements($table)
     {
-        return [
+        $defaultReplacements = (new Replacements($table))->getReplacements();
+
+        return array_merge($defaultReplacements, [
             'fillable_fields' => $this->buildFillableFields($table),
-        ];
+        ]);
     }
 
     /**
