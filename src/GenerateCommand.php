@@ -4,7 +4,7 @@ namespace Jeroenherczeg\Bee;
 
 use Illuminate\Filesystem\Filesystem;
 use Jeroenherczeg\Bee\Generators\Laravel\ModelGenerator;
-use Jeroenherczeg\Bee\ValueObject\Config;
+use Jeroenherczeg\Bee\ValueObjects\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

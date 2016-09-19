@@ -1,6 +1,6 @@
 <?php
 
-namespace Jeroenherczeg\Bee\ValueObject;
+namespace Jeroenherczeg\Bee\ValueObjects;
 
 use Exception;
 use Illuminate\Filesystem\Filesystem;
