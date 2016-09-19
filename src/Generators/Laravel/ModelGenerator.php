@@ -14,7 +14,7 @@ class ModelGenerator extends SingleGenerator
     /**
      * @return string
      */
-    protected function getStubPath()
+    protected function getStub()
     {
         return 'laravel/model.stub';
     }

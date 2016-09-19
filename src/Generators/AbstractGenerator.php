@@ -47,7 +47,7 @@ abstract class AbstractGenerator
     /**
      * @return string
      */
-    abstract protected function getStubPath();
+    abstract protected function getStub();
 
     /**
      * @return string
@@ -65,6 +65,11 @@ abstract class AbstractGenerator
     abstract protected function getFilenameFormat();
     
 
+    protected function getStubPath()
+    {
+        return $this->config->getStubsDir() . $this->getStub();
+    }
+    
     /**
      * @param $replacements
      * @param $stub

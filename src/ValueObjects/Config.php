@@ -22,6 +22,11 @@ class Config
     protected $basesFilesDir;
 
     /**
+     * @var
+     */
+    protected $stubsDir;
+
+    /**
      * @var string
      */
     protected $namespace = 'App';
@@ -39,6 +44,8 @@ class Config
         $this->projectDir = getcwd();
 
         $this->baseFilesDir = __DIR__ . '/../../base_files/';
+
+        $this->stubsDir = __DIR__ . '/../../stubs/';
 
         $fs = new Filesystem();
         $config = $fs->get($this->projectDir . '/.bee');
@@ -81,6 +88,14 @@ class Config
     public function getBaseFilesDir()
     {
         return $this->baseFilesDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStubsDir()
+    {
+        return $this->stubsDir;
     }
 
     /**

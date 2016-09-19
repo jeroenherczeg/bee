@@ -11,7 +11,6 @@ use Jeroenherczeg\Bee\ValueObjects\Replacements;
  */
 class RoutesGenerator extends CombinedGenerator
 {
-
     /**
      * @var string
      */
@@ -20,7 +19,7 @@ class RoutesGenerator extends CombinedGenerator
     /**
      * @return string
      */
-    protected function getStubPath()
+    protected function getStub()
     {
         return 'laravel/routes.stub';
     }
@@ -54,8 +53,13 @@ class RoutesGenerator extends CombinedGenerator
     {
         return 'api.php';
     }
-    
-    
+
+    /**
+     * @param $tables
+     *
+     * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     public function buildRoutes($tables)
     {
         $partialContent = $this->fs->get($this->partialStub);
@@ -64,7 +68,7 @@ class RoutesGenerator extends CombinedGenerator
 
         foreach ($tables as $table) {
             $replacements = (new Replacements($table))->getReplacements();
-            
+
             $routes .= $this->replace($replacements, $partialContent);
             $routes .= PHP_EOL;
         }
