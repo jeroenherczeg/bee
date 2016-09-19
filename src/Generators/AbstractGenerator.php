@@ -2,6 +2,12 @@
 
 namespace Jeroenherczeg\Bee\Generators;
 
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Jeroenherczeg\Bee\ValueObject\Config;
+
+
 /**
  * Class AbstractGenerator
  * @package Jeroenherczeg\Bee\Generators
@@ -11,53 +17,69 @@ abstract class AbstractGenerator
     /**
      * @var
      */
-    protected $data;
-
-    /**
-     * @var
-     */
     protected $config;
 
     /**
-     * @var
+     * @var Filesystem
      */
-    protected $output;
+    protected $fs;
 
     /**
-     * MigrationGenerator constructor.
+     * @var Str
+     */
+    protected $str;
+
+    /**
+     * @var array
+     */
+    protected $results = [];
+
+    /**
+     * AbstractGenerator constructor.
      *
-     * @param $data
+     * @param $table
      * @param $config
      */
-    public function __construct($data, $config, $output)
+    public function __construct()
     {
-        $this->data = $data;
-        $this->config = $config;
-        $this->output = $output;
+        $this->config = new Config();
+        $this->fs = new Filesystem();
+        $this->str = new Str();
     }
 
     /**
      * @return mixed
      */
-    abstract function generate();
+    abstract protected function generate();
 
     /**
-     * @param $fileName
-     *
-     * @return mixed
+     * @return string
      */
-    protected function loadFile($fileName)
-    {
-        return file_get_contents(__DIR__ .'/../..' . $fileName);
-    }
+    abstract protected function getStubPath();
+
+    /**
+     * @return string
+     */
+    abstract protected function getDestinationPath();
+
+    /**
+     * @return array
+     */
+    abstract protected function getReplacements($table);
+
+    /**
+     * @return string
+     */
+    abstract protected function getFilenameFormat();
+    
 
     /**
      * @param $replacements
      * @param $stub
      *
-     * @return mixed
+     * @return string
      */
-    protected function replace($replacements, $stub)
+    protected function replace(Collection $replacements, $stub)
     {
         foreach ($replacements as $key => $value) {
             $stub = str_replace('{{' . $key . '}}', $value, $stub);
@@ -66,30 +88,15 @@ abstract class AbstractGenerator
         return $stub;
     }
 
-    /**
-     * @param $data
-     * @param $fileName
-     * @param $path
-     */
-    protected function saveFile($data, $fileName, $path)
+    protected function addResult($result)
     {
-        $path = getcwd() . $path;
-
-        if (!file_exists($path)) {
-            mkdir($path, 0755, true);
-        }
-
-        file_put_contents($path . $fileName, $data);
+        $this->results[] = $result;
     }
-    
-    public function makeClassName($value)
+
+    protected function storeFile($filename, $content)
     {
-        $value = str_replace('_', ' ', $value);
-        $value = ucwords(strtolower($value));
-        $value = str_replace(' ', '', $value);
+        $this->fs->put($this->getDestinationPath() . '/' . $filename, $content);
 
-        return $value;
+        $this->addResult($filename);
     }
-    
-    
 }

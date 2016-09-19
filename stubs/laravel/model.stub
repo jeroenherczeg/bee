@@ -4,7 +4,7 @@ namespace {{namespace}}\Models\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 
-class {{class}} extends Model
+class {{TableName}} extends Model
 {
     /**
      * The attributes that are mass assignable.

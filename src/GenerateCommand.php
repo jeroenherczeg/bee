@@ -2,11 +2,12 @@
 
 namespace Jeroenherczeg\Bee;
 
+use Illuminate\Filesystem\Filesystem;
+use Jeroenherczeg\Bee\Generators\Laravel\ModelGenerator;
+use Jeroenherczeg\Bee\ValueObject\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 
 /**
  * Class GenerateCommand
@@ -14,21 +15,20 @@ use Symfony\Component\Finder\Finder;
  */
 class GenerateCommand extends Command
 {
+    /**
+     * @var  OutputInterface
+     */
     protected $output;
 
+    /**
+     * @var
+     */
     protected $fs;
-
-    protected $finder;
-
-    protected $projectDir;
-
-    protected $rootDir;
-
-    protected $baseFilesDir;
-
-    protected $stubFilesDir;
-
-    protected $projectNamespace = 'App';
+    
+    /**
+     * @var
+     */
+    protected $config;
 
     /**
      * Configure the command options.
@@ -48,11 +48,8 @@ class GenerateCommand extends Command
     {
         $this->output = $output;
         $this->fs = new Filesystem();
-        $this->finder = new Finder();
-        $this->projectDir = getcwd();
-        $this->rootDir = __DIR__ . '/../';
-        $this->baseFilesDir = $this->rootDir . 'base_files/';
-        $this->stubFilesDir = $this->rootDir . 'stubs/';
+        $this->config = new Config();
+        $this->tables = json_decode($this->fs->get(getcwd() .'/bee.json'));
     }
 
     /**
@@ -139,7 +136,7 @@ class GenerateCommand extends Command
                 continue;
             }
 
-            $this->fs->remove($boilerplateFullPath);
+            $this->fs->delete($boilerplateFullPath);
             $this->output->writeln('<info> - Removed ' . $boilerplate . '</info>');
         }
 
@@ -153,9 +150,9 @@ class GenerateCommand extends Command
     {
         $this->output->writeln(PHP_EOL . '<comment>Copying base files ...</comment>');
 
-        $this->finder->files()->in($this->baseFilesDir);
+        $files = $this->fs->allFiles($this->baseFilesDir, true);
 
-        foreach ($this->finder as $file) {
+        foreach ($files as $file) {
             $fileFullPath = $file->getFilename();
 
             if ($file->getRelativePath() != '') {
@@ -175,11 +172,12 @@ class GenerateCommand extends Command
     private function generateCode()
     {
         $this->output->writeln(PHP_EOL . '<comment>Generating code ...</comment>');
+        
+        $results = (new ModelGenerator())->generate()->getResults();
 
-        //foreach ($this->tables as $table) {
-        //    LaravelGenerator::generate($table);
-        //    VueGenerator::generate($table);
-        //}
+        foreach ($results as $result) {
+            $this->output->writeln('<info> - Generated ' . $result . '</info>');
+        }
 
         return $this;
     }

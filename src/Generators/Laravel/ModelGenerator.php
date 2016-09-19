@@ -1,39 +1,58 @@
 <?php
 
 namespace Jeroenherczeg\Bee\Generators\Laravel;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+
+use Jeroenherczeg\Bee\Generators\SingleGenerator;
 
 /**
  * Class ModelGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
-class ModelGenerator extends AbstractGenerator
+class ModelGenerator extends SingleGenerator
 {
     /**
-     * Generate models
+     * @return string
      */
-    public function generate()
+    protected function getStubPath()
     {
-        $stub = $this->loadFile($this->config->path->stub->model);
-
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'namespace' => $this->config->default->namespace,
-                'class' =>  $this->makeClassName($table->name),
-                'fillable_fields' => $this->buildFillableFields($table),
-            ];
-
-            $contents = $this->replace($replacements, $stub);
-
-            $fileName = $this->makeClassName($table->name) . '.php';
-            $path = $this->config->path->output->models;
-
-            $this->saveFile($contents, $fileName, $path);
-
-            $this->output->writeln('<info>Created model: ' . $fileName . '</info>');
-        }
+        return 'laravel/model.stub';
     }
 
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
+    {
+        return 'app/Models/Eloquent/';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($table)
+    {
+        return [
+            'fillable_fields' => $this->buildFillableFields($table),
+        ];
+    }
+
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return '{{TableName}}.php';
+    }
+
+    /**
+     * @param $table
+     *
+     * @return string
+     */
     private function buildFillableFields($table)
     {
         $fields = '';
