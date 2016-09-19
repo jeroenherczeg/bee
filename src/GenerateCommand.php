@@ -157,7 +157,7 @@ class GenerateCommand extends Command
             if ($file->getRelativePath() != '') {
                 $fileFullPath = $file->getRelativePath() . '/' . $fileFullPath;
                 if (!$this->fs->isDirectory($this->config->getProjectDir() . '/' . $file->getRelativePath())) {
-                    $this->fs->makeDirectory($this->config->getProjectDir() . '/' . $file->getRelativePath()), 0755, true);
+                    $this->fs->makeDirectory($this->config->getProjectDir() . '/' . $file->getRelativePath(), 0755, true);
                 }
             }
 
