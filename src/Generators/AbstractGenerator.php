@@ -3,7 +3,6 @@
 namespace Jeroenherczeg\Bee\Generators;
 
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
 use Jeroenherczeg\Bee\ValueObjects\Config;
 
 /**
@@ -37,6 +36,14 @@ abstract class AbstractGenerator
     {
         $this->config = new Config();
         $this->fs = new Filesystem();
+    }
+
+    /**
+     * @return array
+     */
+    public function getResults()
+    {
+        return $this->results;
     }
 
     /**
