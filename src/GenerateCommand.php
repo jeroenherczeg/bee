@@ -49,7 +49,6 @@ class GenerateCommand extends Command
         $this->output = $output;
         $this->fs = new Filesystem();
         $this->config = new Config();
-        $this->tables = json_decode($this->fs->get(getcwd() .'/bee.json'));
     }
 
     /**
@@ -129,7 +128,7 @@ class GenerateCommand extends Command
         ];
 
         foreach ($defaultBoilerplate as $boilerplate) {
-            $boilerplateFullPath = $this->projectDir . '/' . $boilerplate;
+            $boilerplateFullPath = $this->config->getProjectDir() . '/' . $boilerplate;
 
             if (!$this->fs->exists($boilerplateFullPath)) {
                 $this->output->writeln(' - <error>' . $boilerplate . '</error> doesn\'t exists! ');
@@ -150,7 +149,7 @@ class GenerateCommand extends Command
     {
         $this->output->writeln(PHP_EOL . '<comment>Copying base files ...</comment>');
 
-        $files = $this->fs->allFiles($this->baseFilesDir, true);
+        $files = $this->fs->allFiles($this->config->getBaseFilesDir(), true);
 
         foreach ($files as $file) {
             $fileFullPath = $file->getFilename();
@@ -159,7 +158,7 @@ class GenerateCommand extends Command
                 $fileFullPath = $file->getRelativePath() . '/' . $fileFullPath;
             }
 
-            $this->fs->copy($this->baseFilesDir . $fileFullPath, $this->projectDir . '/' . $fileFullPath);
+            $this->fs->copy($this->config->getBaseFilesDir() . $fileFullPath, $this->config->getProjectDir() . '/' . $fileFullPath);
             $this->output->writeln('<info> - Copied ' . $fileFullPath . '</info>');
         }
 
