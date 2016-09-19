@@ -38,7 +38,7 @@ class Config
     {
         $this->projectDir = getcwd();
 
-        $this->baseFilesDir = __DIR__ . '/../../';
+        $this->baseFilesDir = __DIR__ . '/../../base_files/';
 
         $fs = new Filesystem();
         $config = $fs->get($this->projectDir . '/.bee');
