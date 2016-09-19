@@ -14,7 +14,7 @@ class Config
     public function __construct()
     {
         $fs = new Filesystem();
-        $config = $this->fs->get(getcwd() . '/.bee');
+        $config = $fs->get(getcwd() . '/.bee');
 
         if (!$this->isValidJson($config)) {
             throw new Exception('.bee is not a valid json file!');
