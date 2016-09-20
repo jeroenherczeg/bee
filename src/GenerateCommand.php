@@ -122,6 +122,7 @@ class GenerateCommand extends Command
             'resources/assets/sass/',
             'resources/views/errors/',
             'resources/views/vendor/',
+            'resources/views/welcome.blade.php',
             'tests/ExampleTest.php',
             'app/User.php',
             'readme.md',
