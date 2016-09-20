@@ -1,5 +1,5 @@
-Route::get('{{models}}', '{{class}}Controller@index');
-Route::post('{{models}}', '{{class}}Controller@store');
-Route::get('{{models}}/{id}', '{{class}}Controller@show');
-Route::put('{{models}}/{id}', '{{class}}Controller@update');
-Route::delete('{{models}}/{id}', '{{class}}Controller@destroy');
+Route::get('{{table_names}}', '{{TableName}}Controller@index');
+Route::post('{{table_names}}', '{{TableName}}Controller@store');
+Route::get('{{table_names}}/{id}', '{{TableName}}Controller@show');
+Route::put('{{table_names}}/{id}', '{{TableName}}Controller@update');
+Route::delete('{{table_names}}/{id}', '{{TableName}}Controller@destroy');

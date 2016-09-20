@@ -1,5 +1,8 @@
 {
+	"name": "Les Etalages",
 	"namespace": "LE",
+	"site_root": "http://lesetalages.dev",
+	"api_root": "http://lesetalages.dev/api",
 	"tables": [
 		{
 			"name": "user",

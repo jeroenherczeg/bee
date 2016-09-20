@@ -1,11 +1,9 @@
-import * as types from './mutation-types'
-
 export default {
-  [types.SET_USER]: (state, user) => {
+  SET_USER (state, user) => {
     state.user = user
   },
-  [types.REMOVE_USER]: (state) => {
+  REMOVE_USER (state) => {
     state.user = null
   },
-  {{mutations}}
+{{mutations}}
 }

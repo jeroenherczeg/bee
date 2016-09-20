@@ -2,33 +2,50 @@
 
 namespace Jeroenherczeg\Bee\Generators\Vue;
 
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\CombinedGenerator;
 
 /**
  * Class ConfigGenerator
  * @package Jeroenherczeg\Bee\Generators\Vue
  */
-class ConfigGenerator extends AbstractGenerator
+class ConfigGenerator extends CombinedGenerator
 {
     /**
-     * Generate migrations
+     * @return string
      */
-    public function generate()
+    protected function getStub()
     {
-        $stub = $this->loadFile($this->config->path->stub->vue->config);
+        return 'vue/config.stub';
+    }
 
-        $replacements = [
-            'site_root' => $this->data->env->dev->site,
-            'api_root' => $this->data->env->dev->api,
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
+    {
+        return 'resources/assets/js/';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($tables)
+    {
+        return [
+            'site_root' => $this->config->getSiteRoot(),
+            'api_root' => $this->config->getApiRoot(),
         ];
+    }
 
-        $contents = $this->replace($replacements, $stub);
-
-        $fileName = 'config.js';
-        $path = $this->config->path->output->vue->root;
-
-        $this->saveFile($contents, $fileName, $path);
-
-        $this->output->writeln('<info>Created vue config: ' . $fileName . '</info>');
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return 'config.js';
     }
 }

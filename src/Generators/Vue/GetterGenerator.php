@@ -2,49 +2,71 @@
 
 namespace Jeroenherczeg\Bee\Generators\Vue;
 
-use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\CombinedGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class GetterGenerator
  * @package Jeroenherczeg\Bee\Generators\Vue
  */
-class GetterGenerator extends AbstractGenerator
+class GetterGenerator extends CombinedGenerator
 {
     /**
-     * Generate migrations
+     * @var string
      */
-    public function generate()
+    protected $partialStub = 'vue/partials/get.stub';
+
+    /**
+     * @return string
+     */
+    protected function getStub()
     {
-        $stub = $this->loadFile($this->config->path->stub->vue->getters);
-
-        $replacements = [
-            'getters' => $this->buildGetters(),
-        ];
-
-        $contents = $this->replace($replacements, $stub);
-
-        $fileName = 'getters.js';
-        $path = $this->config->path->output->vue->state;
-
-        $this->saveFile($contents, $fileName, $path);
-
-        $this->output->writeln('<info>Created vue getter: ' . $fileName . '</info>');
+        return 'vue/getters.stub';
     }
 
-    public function buildGetters()
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
     {
-        $str = new Str();
-        $stub = $this->loadFile($this->config->path->stub->vue->partials->get);
+        return 'resources/assets/js/state/';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($tables)
+    {
+        return [
+            'getters' => $this->buildGetters($tables),
+        ];
+    }
+
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return 'getters.js';
+    }
+
+    /**
+     * @return string
+     */
+    public function buildGetters($tables)
+    {
+        $partialContent = $this->fs->get($this->config->getStubsDir() . $this->partialStub);
 
         $get = '';
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'plural_class'=> $str->plural($this->makeClassName($table->name)),
-                'plural_model'=> $str->plural(strtolower($table->name)),
-            ];
 
-            $get .= $this->replace($replacements, $stub);
+        foreach ($tables as $table) {
+            $replacements = (new Replacements($table))->getReplacements();
+
+            $get .= $this->replace($replacements, $partialContent);
             $get .= PHP_EOL;
         }
 

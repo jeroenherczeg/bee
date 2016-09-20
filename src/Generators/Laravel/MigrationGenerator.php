@@ -2,45 +2,55 @@
 
 namespace Jeroenherczeg\Bee\Generators\Laravel;
 
-use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\SingleGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class MigrationGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
-class MigrationGenerator extends AbstractGenerator
+class MigrationGenerator extends SingleGenerator
 {
     /**
-     * Generate migrations
+     * @return string
      */
-    public function generate()
+    protected function getStub()
     {
-        $str = new Str();
-        $stub = $this->loadFile($this->config->path->stub->migration);
-
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'class' => 'Create' . $str->plural($this->makeClassName($table->name)) . 'Table',
-                'table' =>  strtolower($str->plural($table->name)),
-                'schema_up' => $this->buildSchemaUp($table)
-            ];
-
-            $contents = $this->replace($replacements, $stub);
-
-            $fileName = date("Y_m_d") . '_' . str_pad($index, 6, "0", STR_PAD_LEFT) . '_create_' . strtolower($str->plural($table->name)) . '_table.php';
-            $path = $this->config->path->output->migrations;
-
-            $this->saveFile($contents, $fileName, $path);
-
-            $this->output->writeln('<info>Created migration: ' . $fileName . '</info>');
-
-            if (strtolower($table->name) == 'user') {
-
-            }
-        }
+        return 'laravel/migration.stub';
     }
-    
+
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
+    {
+        return 'database/migrations/';
+    }
+
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return '{{timestamp}}_create_{{table_names}}_table.php';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($table)
+    {
+        $defaultReplacements = (new Replacements($table))->getReplacements();
+
+        return array_merge($defaultReplacements, [
+            'schema_up' => $this->buildSchemaUp($table),
+        ]);
+    }
+
     private function buildSchemaUp($table)
     {
         $schema = '';

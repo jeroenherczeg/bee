@@ -109,7 +109,10 @@ abstract class AbstractGenerator
      */
     protected function storeFile($filename, $content)
     {
-        echo $filename;
+        if (!$this->fs->isDirectory($this->getDestinationPath())) {
+            $this->fs->makeDirectory($this->getDestinationPath(), 0755, true);
+        }
+
         $this->fs->put($this->getDestinationPath() . '/' . $filename, $content);
 
         $this->addResult($filename);

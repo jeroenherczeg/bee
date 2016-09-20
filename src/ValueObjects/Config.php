@@ -37,6 +37,16 @@ class Config
     protected $tables = [];
 
     /**
+     * @var string
+     */
+    protected $site_root = 'http://localhost:8080/';
+
+    /**
+     * @var string
+     */
+    protected $api_root = 'http://localhost:8080/api/';
+
+    /**
      * Config constructor.
      */
     public function __construct()
@@ -48,14 +58,24 @@ class Config
         $this->stubsDir = __DIR__ . '/../../stubs/';
 
         $fs = new Filesystem();
-        $config = $fs->get($this->projectDir . '/.bee');
+        $json = $fs->get($this->projectDir . '/.bee');
 
-        if (!$this->isValidJson($config)) {
+        if (!$this->isValidJson($json)) {
             throw new Exception('.bee is not a valid json file!');
         }
 
+        $config = json_decode($json);
+
         if (isset($config->namespace)) {
             $this->namespace = $config->namespace;
+        }
+
+        if (isset($config->site_root)) {
+            $this->site_root = $config->site_root;
+        }
+
+        if (isset($config->api_root)) {
+            $this->api_root = $config->api_root;
         }
 
         if (isset($config->tables)) {
@@ -112,5 +132,21 @@ class Config
     public function getTables()
     {
         return $this->tables;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiteRoot()
+    {
+        return $this->site_root;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiRoot()
+    {
+        return $this->api_root;
     }
 }

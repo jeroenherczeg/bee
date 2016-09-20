@@ -2,12 +2,12 @@
 
 namespace {{namespace}}\Models\Transformers;
 
-use {{namespace}}\Models\Eloquent\{{class}};
+use {{namespace}}\Models\Eloquent\{{TableName}};
 use League\Fractal\TransformerAbstract;
 
-class {{class}}Transformer extends TransformerAbstract
+class {{TableName}}Transformer extends TransformerAbstract
 {
-    public function transform({{class}} ${{model}})
+    public function transform({{TableName}} ${{table_name}})
     {
         return [
             {{fields}}

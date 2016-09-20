@@ -3,26 +3,26 @@
 namespace {{namespace}}Test;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use {{namespace}}\Models\Eloquent\{{class}};
-use {{namespace}}\Models\Transformers\{{class}}Transformer;
+use {{namespace}}\Models\Eloquent\{{TableName}};
+use {{namespace}}\Models\Transformers\{{TableName}}Transformer;
 use {{namespace}}Test\TestCase;
 
 /**
- * Class {{class}}
+ * Class {{TableName}}
  * @package {{namespace}}Test
  */
-class {{class}}Test extends TestCase
+class {{TableName}}Test extends TestCase
 {
     use DatabaseMigrations;
 
     /**
      * @test
      */
-    public function can_receive_all_{{model}}s()
+    public function can_receive_all_{{table_names}}()
     {
-        $this->make{{class}}();
+        $this->make{{TableName}}();
 
-        $this->json('get', '/api/{{models}}')
+        $this->json('get', '/api/{{table_names}}')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'data' => [
@@ -34,12 +34,12 @@ class {{class}}Test extends TestCase
     /**
      * @test
      */
-    public function can_receive_an_{{model}}()
+    public function can_receive_a_{{table_name}}()
     {
-        ${{model}}s = $this->make{{class}}();
-        ${{model}} = ${{model}}s->first();
+        ${{table_names}} = $this->make{{TableName}}();
+        ${{table_name}} = ${{table_names}}->first();
 
-        $this->json('get', '/api/{{models}}/' . ${{model}}->id)
+        $this->json('get', '/api/{{table_names}}/' . ${{table_name}}->id)
             ->seeJsonStructure([
                 'data' => $this->getFields()
             ])
@@ -49,9 +49,9 @@ class {{class}}Test extends TestCase
     /**
      * @test
      */
-    public function receives_an_error_when_accessing_a_non_existing_{{model}}()
+    public function receives_an_error_when_accessing_a_non_existing_{{table_name}}()
     {
-        $this->json('get', '/api/{{models}}/666')
+        $this->json('get', '/api/{{table_names}}/666')
             ->seeJsonStructure([
                 'errors'
             ])
@@ -64,11 +64,11 @@ class {{class}}Test extends TestCase
     /**
      * @test
      */
-    public function can_create_an_{{model}}()
+    public function can_create_an_{{table_name}}()
     {
-        ${{model}}Fields = $this->getFakeData();
+        ${{table_name}}Fields = $this->getFakeData();
 
-        $this->json('post', 'api/{{models}}', ${{model}}Fields)
+        $this->json('post', 'api/{{table_names}}', ${{table_name}}Fields)
             ->seeStatusCode(201)
             ->seeJsonStructure([
                 'data' => $this->getFields()
@@ -78,22 +78,22 @@ class {{class}}Test extends TestCase
     /**
      * @test
      */
-    public function receives_a_validation_error_when_creating_an_empty_{{model}}()
+    public function receives_a_validation_error_when_creating_an_empty_{{table_name}}()
     {
-        $this->json('post', '/api/{{models}}', [])
+        $this->json('post', '/api/{{table_names}}', [])
             ->seeStatusCode(422);
     }
 
     /**
      * @test
      */
-    public function can_update_an_{{model}}()
+    public function can_update_an_{{table_name}}()
     {
-        ${{model}}s = $this->make{{class}}();
-        ${{model}} = ${{model}}s->first();
-        ${{model}}Fields = $this->getFakeData();
+        ${{table_name}}s = $this->make{{TableName}}();
+        ${{table_name}} = ${{table_name}}s->first();
+        ${{table_name}}Fields = $this->getFakeData();
 
-        $test = $this->json('put', 'api/{{models}}/' . ${{model}}->id, ${{model}}Fields)
+        $test = $this->json('put', 'api/{{table_names}}/' . ${{table_name}}->id, ${{table_name}}Fields)
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'data' => $this->getFields()
@@ -103,23 +103,23 @@ class {{class}}Test extends TestCase
     /**
      * @test
      */
-    public function receives_a_validation_error_when_updating_to_an_empty_{{model}}()
+    public function receives_a_validation_error_when_updating_to_an_empty_{{table_name}}()
     {
-        ${{model}}s = $this->make{{class}}();
-        ${{model}} = ${{model}}s->first();
+        ${{table_name}}s = $this->make{{TableName}}();
+        ${{table_name}} = ${{table_name}}s->first();
 
-        $this->json('put', '/api/{{models}}/' . ${{model}}->id, [])
+        $this->json('put', '/api/{{table_names}}/' . ${{table_name}}->id, [])
             ->seeStatusCode(422);
     }
 
     /**
      * @test
      */
-    public function receives_an_error_when_updating_a_non_existing_{{model}}()
+    public function receives_an_error_when_updating_a_non_existing_{{table_name}}()
     {
-        ${{model}}Fields = $this->getFakeData();
+        ${{table_name}}Fields = $this->getFakeData();
 
-        $this->json('put', 'api/{{models}}/666', ${{model}}Fields)
+        $this->json('put', 'api/{{table_names}}/666', ${{table_name}}Fields)
             ->seeStatusCode(404)
             ->seeJsonStructure([
                 'errors'
@@ -132,21 +132,21 @@ class {{class}}Test extends TestCase
     /**
      * @test
      */
-    public function can_delete_an_{{model}}()
+    public function can_delete_an_{{table_name}}()
     {
-        ${{model}}s = $this->make{{class}}();
-        ${{model}} = ${{model}}s->first();
+        ${{table_name}}s = $this->make{{TableName}}();
+        ${{table_name}} = ${{table_name}}s->first();
 
-        $this->json('delete', '/api/{{models}}/' . ${{model}}->id)
+        $this->json('delete', '/api/{{table_names}}/' . ${{table_name}}->id)
             ->seeStatusCode(200);
     }
 
     /**
      * @test
      */
-    public function receives_an_error_when_deleting_a_non_existing_{{model}}()
+    public function receives_an_error_when_deleting_a_non_existing_{{table_name}}()
     {
-        $this->json('delete', '/api/{{models}}/666')
+        $this->json('delete', '/api/{{table_names}}/666')
             ->seeJsonStructure([
                 'errors'
             ])
@@ -156,18 +156,18 @@ class {{class}}Test extends TestCase
             ]);
     }
 
-    private function make{{class}}()
+    private function make{{TableName}}()
     {
-        return factory({{class}}::class, 2)->create();
+        return factory({{TableName}}::class, 2)->create();
     }
 
     private function getFakeData()
     {
-        return factory({{class}}::class)->make()->toArray();
+        return factory({{TableName}}::class)->make()->toArray();
     }
 
     private function getFields()
     {
-        return array_keys((new {{class}}Transformer())->transform(factory({{class}}::class)->make()));
+        return array_keys((new {{TableName}}Transformer())->transform(factory({{TableName}}::class)->make()));
     }
 }

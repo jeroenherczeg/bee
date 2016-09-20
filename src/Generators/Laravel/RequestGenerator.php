@@ -1,39 +1,61 @@
 <?php
 
 namespace Jeroenherczeg\Bee\Generators\Laravel;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+
+use Jeroenherczeg\Bee\Generators\SingleGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class RequestGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
-class RequestGenerator extends AbstractGenerator
+class RequestGenerator extends SingleGenerator
 {
     /**
-     * Generate models
+     * @return string
      */
-    public function generate()
+    protected function getStub()
     {
-        $stub = $this->loadFile($this->config->path->stub->request);
-
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'namespace' => $this->config->default->namespace,
-                'class' =>  $this->makeClassName($table->name),
-                'rules' => $this->buildRules($table)
-            ];
-
-            $contents = $this->replace($replacements, $stub);
-
-            $fileName = $this->makeClassName($table->name) . 'Request.php';
-            $path = $this->config->path->output->requests;
-
-            $this->saveFile($contents, $fileName, $path);
-
-            $this->output->writeln('<info>Created request: ' . $fileName . '</info>');
-        }
+        return 'laravel/request.stub';
     }
 
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
+    {
+        return 'app/Http/Requests/';
+    }
+
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return '{{TableName}}Request.php';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($table)
+    {
+        $defaultReplacements = (new Replacements($table))->getReplacements();
+
+        return array_merge($defaultReplacements, [
+            'rules' => $this->buildRules($table),
+        ]);
+    }
+
+    /**
+     * @param $table
+     *
+     * @return string
+     */
     private function buildRules($table)
     {
         $rules = '';

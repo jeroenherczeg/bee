@@ -4,7 +4,7 @@ namespace {{namespace}}\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class {{class}}Request extends FormRequest
+class {{TableName}}Request extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

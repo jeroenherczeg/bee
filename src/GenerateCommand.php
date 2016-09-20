@@ -3,7 +3,21 @@
 namespace Jeroenherczeg\Bee;
 
 use Illuminate\Filesystem\Filesystem;
+use Jeroenherczeg\Bee\Generators\Laravel\ControllerGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\FactoryGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\MigrationGenerator;
 use Jeroenherczeg\Bee\Generators\Laravel\ModelGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\RequestGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\RoutesGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\SeedGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\TestGenerator;
+use Jeroenherczeg\Bee\Generators\Laravel\TransformerGenerator;
+use Jeroenherczeg\Bee\Generators\Vue\ActionGenerator;
+use Jeroenherczeg\Bee\Generators\Vue\ApiGenerator;
+use Jeroenherczeg\Bee\Generators\Vue\ConfigGenerator;
+use Jeroenherczeg\Bee\Generators\Vue\GetterGenerator;
+use Jeroenherczeg\Bee\Generators\Vue\MutationGenerator;
+use Jeroenherczeg\Bee\Generators\Vue\StoreGenerator;
 use Jeroenherczeg\Bee\ValueObjects\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -180,11 +194,29 @@ class GenerateCommand extends Command
     private function generateCode()
     {
         $this->output->writeln(PHP_EOL . '<comment>Generating code ...</comment>');
-        
-        $results = (new ModelGenerator())->generate()->getResults();
 
-        foreach ($results as $result) {
-            $this->output->writeln('<info> - Generated ' . $result . '</info>');
+        $results['laravel migrations']   = (new MigrationGenerator())->generate()->getResults();
+        $results['laravel models']       = (new ModelGenerator())->generate()->getResults();
+        $results['laravel factories']    = (new FactoryGenerator())->generate()->getResults();
+        $results['laravel seeds']        = (new SeedGenerator())->generate()->getResults();
+        $results['laravel transformers'] = (new TransformerGenerator())->generate()->getResults();
+        $results['laravel requests']     = (new RequestGenerator())->generate()->getResults();
+        $results['laravel controllers']  = (new ControllerGenerator())->generate()->getResults();
+        $results['laravel routes']       = (new RoutesGenerator())->generate()->getResults();
+        $results['laravel tests']        = (new TestGenerator())->generate()->getResults();
+
+        $results['vue api']              = (new ApiGenerator())->generate()->getResults();
+        $results['vue actions']          = (new ActionGenerator())->generate()->getResults();
+        $results['vue getters']          = (new GetterGenerator())->generate()->getResults();
+        $results['vue mutations']        = (new MutationGenerator())->generate()->getResults();
+        $results['vue store']            = (new StoreGenerator())->generate()->getResults();
+        $results['vue config']           = (new ConfigGenerator())->generate()->getResults();
+
+        foreach ($results as $generator => $filenames) {
+            $this->output->writeln(PHP_EOL . ' - Generated ' . $generator);
+            foreach ($filenames as $filename ) {
+                $this->output->writeln('<info>   - ' . $filename . '</info>');
+            }
         }
 
         return $this;

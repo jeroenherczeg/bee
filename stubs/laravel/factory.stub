@@ -1,9 +1,9 @@
 <?php
 
-use {{namespace}}\Models\Eloquent\{{class}};
+use {{namespace}}\Models\Eloquent\{{TableName}};
 use Faker\Generator;
 
-$factory->define({{class}}::class, function (Generator $faker) {
+$factory->define({{TableName}}::class, function (Generator $faker) {
 
     return [
         {{fields}}

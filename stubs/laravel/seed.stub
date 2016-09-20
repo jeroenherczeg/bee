@@ -2,9 +2,9 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
-use {{namespace}}\Models\{{class}};
+use {{namespace}}\Models\{{TableName}};
 
-class {{class}}TableSeeder extends Seeder
+class {{TableNames}}TableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +13,6 @@ class {{class}}TableSeeder extends Seeder
      */
     public function run()
     {
-        factory({{class}}::class, 10)->create();
+        factory({{TableName}}::class, 10)->create();
     }
 }

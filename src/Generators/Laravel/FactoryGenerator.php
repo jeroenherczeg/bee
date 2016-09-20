@@ -2,41 +2,55 @@
 
 namespace Jeroenherczeg\Bee\Generators\Laravel;
 
-use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\SingleGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class FactoryGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
-class FactoryGenerator extends AbstractGenerator
+class FactoryGenerator extends SingleGenerator
 {
     /**
-     * Generate migrations
+     * @return string
      */
-    public function generate()
+    protected function getStub()
     {
-        $str = new Str();
-        $stub = $this->loadFile($this->config->path->stub->factory);
-
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'namespace' => $this->config->default->namespace,
-                'class' => $this->makeClassName($table->name),
-                'fields' => $this->buildFields($table)
-            ];
-
-            $contents = $this->replace($replacements, $stub);
-
-            $fileName = $this->makeClassName($table->name) . 'Factory.php';
-            $path = $this->config->path->output->factories;
-
-            $this->saveFile($contents, $fileName, $path);
-
-            $this->output->writeln('<info>Created factory: ' . $fileName . '</info>');
-        }
+        return 'laravel/factory.stub';
     }
 
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
+    {
+        return 'database/factories/';
+    }
+
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return '{{TableName}}Factory.php';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($table)
+    {
+        $defaultReplacements = (new Replacements($table))->getReplacements();
+
+        return array_merge($defaultReplacements, [
+            'fields' => $this->buildFields($table),
+        ]);
+    }
+    
     private function buildFields($table)
     {
         $fields = '';

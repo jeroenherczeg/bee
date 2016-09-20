@@ -2,50 +2,71 @@
 
 namespace Jeroenherczeg\Bee\Generators\Vue;
 
-use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\CombinedGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class ActionGenerator
  * @package Jeroenherczeg\Bee\Generators\Vue
  */
-class ActionGenerator extends AbstractGenerator
+class ActionGenerator extends CombinedGenerator
 {
     /**
-     * Generate migrations
+     * @var string
      */
-    public function generate()
+    protected $partialStub = 'vue/partials/action.stub';
+
+    /**
+     * @return string
+     */
+    protected function getStub()
     {
-        $stub = $this->loadFile($this->config->path->stub->vue->actions);
-
-        $replacements = [
-            'actions' => $this->buildActions(),
-        ];
-
-        $contents = $this->replace($replacements, $stub);
-
-        $fileName = 'actions.js';
-        $path = $this->config->path->output->vue->state;
-
-        $this->saveFile($contents, $fileName, $path);
-
-        $this->output->writeln('<info>Created vue actions: ' . $fileName . '</info>');
+        return 'vue/actions.stub';
     }
 
-    public function buildActions()
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
     {
-        $str = new Str();
-        $stub = $this->loadFile($this->config->path->stub->vue->partials->action);
+        return 'resources/assets/js/state/';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($tables)
+    {
+        return [
+            'actions' => $this->buildActions($tables),
+        ];
+    }
+
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return 'actions.js';
+    }
+
+    /**
+     * @return string
+     */
+    public function buildActions($tables)
+    {
+        $partialContent = $this->fs->get($this->config->getStubsDir() . $this->partialStub);
 
         $actions = '';
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'plural_class' => $str->plural($this->makeClassName($table->name)),
-                'plural_model' => $str->plural($table->name),
-                'plural_model_caps'=> strtoupper($str->plural($table->name)),
-            ];
 
-            $actions .= $this->replace($replacements, $stub);
+        foreach ($tables as $table) {
+            $replacements = (new Replacements($table))->getReplacements();
+
+            $actions .= $this->replace($replacements, $partialContent);
             $actions .= PHP_EOL;
         }
 

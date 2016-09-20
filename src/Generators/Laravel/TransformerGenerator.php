@@ -1,40 +1,61 @@
 <?php
 
 namespace Jeroenherczeg\Bee\Generators\Laravel;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+
+use Jeroenherczeg\Bee\Generators\SingleGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class TransformerGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
-class TransformerGenerator extends AbstractGenerator
+class TransformerGenerator extends SingleGenerator
 {
     /**
-     * Generate models
+     * @return string
      */
-    public function generate()
+    protected function getStub()
     {
-        $stub = $this->loadFile($this->config->path->stub->transformer);
-
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'namespace' => $this->config->default->namespace,
-                'class' =>  $this->makeClassName($table->name),
-                'model' =>  strtolower($table->name),
-                'fields' => $this->buildFields($table)
-            ];
-
-            $contents = $this->replace($replacements, $stub);
-
-            $fileName = $this->makeClassName($table->name) . 'Transformer.php';
-            $path = $this->config->path->output->transformers;
-
-            $this->saveFile($contents, $fileName, $path);
-
-            $this->output->writeln('<info>Created transformer: ' . $fileName . '</info>');
-        }
+        return 'laravel/transformer.stub';
     }
 
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
+    {
+        return 'app/Models/Transformers/';
+    }
+
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return '{{TableName}}Transformer.php';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($table)
+    {
+        $defaultReplacements = (new Replacements($table))->getReplacements();
+
+        return array_merge($defaultReplacements, [
+            'fields' => $this->buildFields($table),
+        ]);
+    }
+
+    /**
+     * @param $table
+     *
+     * @return string
+     */
     private function buildFields($table)
     {
         $fields = '';

@@ -2,36 +2,50 @@
 
 namespace Jeroenherczeg\Bee\Generators\Laravel;
 
-use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\SingleGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class SeedGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
-class SeedGenerator extends AbstractGenerator
+class SeedGenerator extends SingleGenerator
 {
     /**
-     * Generate migrations
+     * @return string
      */
-    public function generate()
+    protected function getStub()
     {
-        $stub = $this->loadFile($this->config->path->stub->seed);
+        return 'laravel/seed.stub';
+    }
 
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'namespace' => $this->config->default->namespace,
-                'class' => $this->makeClassName($table->name),
-            ];
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
+    {
+        return 'database/seeds/';
+    }
 
-            $contents = $this->replace($replacements, $stub);
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return '{{TableNames}}TableSeeder.php';
+    }
 
-            $fileName = $this->makeClassName($table->name) . 'TableSeeder.php';
-            $path = $this->config->path->output->seeds;
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($table)
+    {
+        $defaultReplacements = (new Replacements($table))->getReplacements();
 
-            $this->saveFile($contents, $fileName, $path);
-
-            $this->output->writeln('<info>Created seed: ' . $fileName . '</info>');
-        }
+        return array_merge($defaultReplacements, []);
     }
 }

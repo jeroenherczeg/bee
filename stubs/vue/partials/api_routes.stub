@@ -1,5 +1,5 @@
-export function get{{plural_class}} (cb) {
-  Vue.http.get(API_ROOT + '{{plural_model}}').then(
+export function get{{TableNames}} (cb) {
+  Vue.http.get(API_ROOT + '{{table_names}}').then(
     response => cb(response.data.data)
   )
 }

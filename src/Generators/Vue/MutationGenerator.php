@@ -2,94 +2,79 @@
 
 namespace Jeroenherczeg\Bee\Generators\Vue;
 
-use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\CombinedGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
+
 
 /**
  * Class MutationGenerator
  * @package Jeroenherczeg\Bee\Generators\Vue
  */
-class MutationGenerator extends AbstractGenerator
+class MutationGenerator extends CombinedGenerator
 {
     /**
-     * Generate migrations
+     * @var string
      */
-    public function generate()
+    protected $partialStub = 'vue/partials/mutation.stub';
+
+    /**
+     * @return string
+     */
+    protected function getStub()
     {
-        $str = new Str();
-
-        // Mutation
-        $stub = $this->loadFile($this->config->path->stub->vue->mutations);
-        
-        $replacements = [
-            'mutations' => $this->buildMutations(),
-        ];
-
-        $contents = $this->replace($replacements, $stub) . PHP_EOL;
-
-        $fileName = 'mutations.js';
-        $path = $this->config->path->output->vue->state;
-
-        $this->saveFile($contents, $fileName, $path);
-
-        $this->output->writeln('<info>Created vue mutation: ' . $fileName . '</info>');
-
-
-
-        // Mutation types
-        $stub = $this->loadFile($this->config->path->stub->vue->mutationtypes);
-
-        $replacements = [
-            'types' => $this->buildMutationTypes(),
-        ];
-
-        $contents = $this->replace($replacements, $stub) . PHP_EOL;
-
-        $fileName = 'mutation-types.js';
-        $path = $this->config->path->output->vue->state;
-
-        $this->saveFile($contents, $fileName, $path);
-
-        $this->output->writeln('<info>Created vue mutation types: ' . $fileName . '</info>');
+        return 'vue/mutations.stub';
     }
 
-    public function buildMutations()
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
     {
-        $str = new Str();
-        $stub = $this->loadFile($this->config->path->stub->vue->partials->mutation);
+        return 'resources/assets/js/state/';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($tables)
+    {
+        return [
+            'mutations' => $this->buildMutations($tables),
+        ];
+    }
+
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return 'mutations.js';
+    }
+
+    /**
+     * @param $tables
+     *
+     * @return string
+     */
+    public function buildMutations($tables)
+    {
+        $partialContent = $this->fs->get($this->config->getStubsDir() . $this->partialStub);
 
         $mutations = '';
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'plural_models'=> $str->plural($table->name),
-                'plural_models_caps'=> strtoupper($str->plural($table->name)),
-            ];
 
-            $mutations .= $this->replace($replacements, $stub);
+        foreach ($tables as $table) {
+            $replacements = (new Replacements($table))->getReplacements();
+
+            $mutations .= $this->replace($replacements, $partialContent);
             $mutations .= PHP_EOL;
         }
 
         $mutations = substr($mutations, 0, -2);
 
         return $mutations;
-    }
-
-    public function buildMutationTypes()
-    {
-        $str = new Str();
-
-        $stub = $this->loadFile($this->config->path->stub->vue->partials->mutationtype);
-
-        $contents = '';
-
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'plural_models_caps'=> strtoupper($str->plural($table->name)),
-            ];
-
-            $contents .= $this->replace($replacements, $stub) . PHP_EOL;
-
-        }
-        return $contents;
     }
 }

@@ -19,7 +19,6 @@ abstract class SingleGenerator extends AbstractGenerator
         $stubContent = $this->fs->get($this->getStubPath());
 
         foreach ($this->config->getTables() as $table) {
-
             $replacements = array_merge(
                 (new Replacements($table))->getReplacements(),
                 $this->getReplacements($table)

@@ -1,7 +1,7 @@
 {
     "name": "jeroenherczeg/bee",
-    "description": "Laravel / Vue RAD",
-    "keywords": ["laravel", "vue"],
+    "description": "An Extremely Opinionated Scaffolding Command Line Tool",
+    "keywords": [],
     "license": "MIT",
     "authors": [
         {

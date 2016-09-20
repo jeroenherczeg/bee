@@ -62,7 +62,7 @@ class RoutesGenerator extends CombinedGenerator
      */
     public function buildRoutes($tables)
     {
-        $partialContent = $this->fs->get($this->partialStub);
+        $partialContent = $this->fs->get($this->config->getStubsDir() . $this->partialStub);
 
         $routes = '';
 

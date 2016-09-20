@@ -2,59 +2,50 @@
 
 namespace Jeroenherczeg\Bee\Generators\Laravel;
 
-use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\SingleGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class TestGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
-class TestGenerator extends AbstractGenerator
+class TestGenerator extends SingleGenerator
 {
     /**
-     * Generate migrations
+     * @return string
      */
-    public function generate()
+    protected function getStub()
     {
-        $this->createBaseTest();
-
-        $str = new Str();
-        $stub = $this->loadFile($this->config->path->stub->test);
-
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'namespace' => $this->config->default->namespace,
-                'class' => $this->makeClassName($table->name),
-                'model' => strtolower($table->name),
-                'models' => strtolower($str->plural($table->name)),
-            ];
-
-            $contents = $this->replace($replacements, $stub);
-
-            $fileName = $this->makeClassName($table->name) . 'Test.php';
-            $path = $this->config->path->output->tests;
-
-            $this->saveFile($contents, $fileName, $path);
-
-            $this->output->writeln('<info>Created test: ' . $fileName . '</info>');
-        }
+        return 'laravel/test.stub';
     }
 
-    public function createBaseTest()
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
     {
-        $stub = $this->loadFile($this->config->path->stub->basetest);
+        return 'tests/';
+    }
 
-        $replacements = [
-            'namespace' => $this->config->default->namespace,
-        ];
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return '{{TableName}}ApiTest.php';
+    }
 
-        $contents = $this->replace($replacements, $stub);
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($table)
+    {
+        $defaultReplacements = (new Replacements($table))->getReplacements();
 
-        $fileName = 'TestCase.php';
-        $path = $this->config->path->output->tests;
-
-        $this->saveFile($contents, $fileName, $path);
-
-        $this->output->writeln('<info>Created base test</info>');
+        return array_merge($defaultReplacements, []);
     }
 }

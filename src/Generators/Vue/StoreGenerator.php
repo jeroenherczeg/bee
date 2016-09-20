@@ -2,43 +2,63 @@
 
 namespace Jeroenherczeg\Bee\Generators\Vue;
 
-use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\CombinedGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class StoreGenerator
  * @package Jeroenherczeg\Bee\Generators\Vue
  */
-class StoreGenerator extends AbstractGenerator
+class StoreGenerator extends CombinedGenerator
 {
     /**
-     * Generate migrations
+     * @return string
      */
-    public function generate()
+    protected function getStub()
     {
-        $stub = $this->loadFile($this->config->path->stub->vue->store);
-
-        $replacements = [
-            'store' => $this->buildStore(),
-        ];
-
-        $contents = $this->replace($replacements, $stub);
-
-        $fileName = 'store.js';
-        $path = $this->config->path->output->vue->state;
-
-        $this->saveFile($contents, $fileName, $path);
-
-        $this->output->writeln('<info>Created vue store: ' . $fileName . '</info>');
+        return 'vue/store.stub';
     }
 
-    public function buildStore()
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
     {
-        $str = new Str();
+        return 'resources/assets/js/state/';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($tables)
+    {
+        return [
+            'store' => $this->buildStore($tables),
+        ];
+    }
+
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return 'store.js';
+    }
+
+    /**
+     * @return string
+     */
+    public function buildStore($tables)
+    {
         $store = '';
 
-        foreach ($this->data->tables as $index => $table) {
-            $store .= $str->plural(strtolower($table->name)) . ': [],' . PHP_EOL . '    ';
+        foreach ($tables as $table) {
+            $replacements = (new Replacements($table))->getReplacements();
+            $store .= $this->replace($replacements, '{{table_names}}: [],' . PHP_EOL . '    ');
         }
 
         $store = substr($store, 0, -6);

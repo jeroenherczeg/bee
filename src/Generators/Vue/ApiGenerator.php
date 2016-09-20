@@ -2,49 +2,71 @@
 
 namespace Jeroenherczeg\Bee\Generators\Vue;
 
-use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\CombinedGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class ApiGenerator
  * @package Jeroenherczeg\Bee\Generators\Vue
  */
-class ApiGenerator extends AbstractGenerator
+class ApiGenerator extends CombinedGenerator
 {
     /**
-     * Generate migrations
+     * @var string
      */
-    public function generate()
+    protected $partialStub = 'vue/partials/api_routes.stub';
+
+    /**
+     * @return string
+     */
+    protected function getStub()
     {
-        $stub = $this->loadFile($this->config->path->stub->vue->api);
-
-        $replacements = [
-            'api' => $this->buildApi(),
-        ];
-
-        $contents = $this->replace($replacements, $stub);
-
-        $fileName = 'api.js';
-        $path = $this->config->path->output->vue->utilities;
-
-        $this->saveFile($contents, $fileName, $path);
-
-        $this->output->writeln('<info>Created vue api: ' . $fileName . '</info>');
+        return 'vue/api.stub';
     }
 
-    public function buildApi()
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
     {
-        $str = new Str();
-        $stub = $this->loadFile($this->config->path->stub->vue->partials->api_routes);
+        return 'resources/assets/js/utilities/';
+    }
+
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($tables)
+    {
+        return [
+            'api' => $this->buildApi($tables),
+        ];
+    }
+
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return 'api.js';
+    }
+
+    /**
+     * @return string
+     */
+    private function buildApi($tables)
+    {
+        $partialContent = $this->fs->get($this->config->getStubsDir() . $this->partialStub);
 
         $routes = '';
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'plural_class' => $str->plural($this->makeClassName($table->name)),
-                'plural_model' => $str->plural($table->name),
-            ];
 
-            $routes .= $this->replace($replacements, $stub);
+        foreach ($tables as $table) {
+            $replacements = (new Replacements($table))->getReplacements();
+
+            $routes .= $this->replace($replacements, $partialContent);
             $routes .= PHP_EOL;
         }
 

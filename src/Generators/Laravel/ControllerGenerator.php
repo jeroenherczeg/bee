@@ -2,59 +2,50 @@
 
 namespace Jeroenherczeg\Bee\Generators\Laravel;
 
-use Illuminate\Support\Str;
-use Jeroenherczeg\Bee\Generators\AbstractGenerator;
+use Jeroenherczeg\Bee\Generators\SingleGenerator;
+use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
  * Class ControllerGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
-class ControllerGenerator extends AbstractGenerator
+class ControllerGenerator extends SingleGenerator
 {
     /**
-     * Generate controllers
+     * @return string
      */
-    public function generate()
+    protected function getStub()
     {
-        $this->createBaseController();
-
-        $str = new Str();
-        $stub = $this->loadFile($this->config->path->stub->controller);
-
-        foreach ($this->data->tables as $index => $table) {
-            $replacements = [
-                'namespace' => $this->config->default->namespace,
-                'class' =>  $this->makeClassName($table->name),
-                'models' => strtolower($str->plural($table->name)),
-                'model' => strtolower($table->name),
-            ];
-
-            $contents = $this->replace($replacements, $stub);
-
-            $fileName = $this->makeClassName($table->name) . 'Controller.php';
-            $path = $this->config->path->output->controllers;
-
-            $this->saveFile($contents, $fileName, $path);
-
-            $this->output->writeln('<info>Created controller: ' . $fileName . '</info>');
-        }
+        return 'laravel/controller.stub';
     }
 
-    public function createBaseController()
+    /**
+     * @return string
+     */
+    protected function getDestinationPath()
     {
-        $stub = $this->loadFile($this->config->path->stub->basecontroller);
-        
-        $replacements = [
-            'namespace' => $this->config->default->namespace,
-        ];
+        return 'app/Http/Controllers/';
+    }
 
-        $contents = $this->replace($replacements, $stub);
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return '{{TableName}}Controller.php';
+    }
 
-        $fileName = 'Controller.php';
-        $path = $this->config->path->output->controllers;
+    /**
+     * Returns an array with the necessary replacements
+     *
+     * @return array
+     */
+    protected function getReplacements($table)
+    {
+        $defaultReplacements = (new Replacements($table))->getReplacements();
 
-        $this->saveFile($contents, $fileName, $path);
-
-        $this->output->writeln('<info>Created base controller</info>');
+        return array_merge($defaultReplacements, []);
     }
 }
