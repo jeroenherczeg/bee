@@ -1,5 +1,4 @@
 # An Extremely Opinionated Scaffolding Command Line Tool
-
 An Extremely Opinionated Scaffolding Command Line Tool
 
 ## Install
