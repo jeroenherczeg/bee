@@ -70,8 +70,11 @@ abstract class AbstractGenerator
      * @return string
      */
     abstract protected function getFilenameFormat();
-    
 
+
+    /**
+     * @return string
+     */
     protected function getStubPath()
     {
         return $this->config->getStubsDir() . $this->getStub();
@@ -92,11 +95,18 @@ abstract class AbstractGenerator
         return $stub;
     }
 
+    /**
+     * @param $result
+     */
     protected function addResult($result)
     {
         $this->results[] = $result;
     }
 
+    /**
+     * @param $filename
+     * @param $content
+     */
     protected function storeFile($filename, $content)
     {
         $this->fs->put($this->getDestinationPath() . '/' . $filename, $content);

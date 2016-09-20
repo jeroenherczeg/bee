@@ -26,6 +26,16 @@ class ModelGenerator extends SingleGenerator
     {
         return 'app/Models/Eloquent/';
     }
+    
+    /**
+     * Returns a string with the filename format
+     *
+     * @return string
+     */
+    protected function getFilenameFormat()
+    {
+        return '{{TableName}}.php';
+    }
 
     /**
      * Returns an array with the necessary replacements
@@ -39,16 +49,6 @@ class ModelGenerator extends SingleGenerator
         return array_merge($defaultReplacements, [
             'fillable_fields' => $this->buildFillableFields($table),
         ]);
-    }
-
-    /**
-     * Returns a string with the filename format
-     *
-     * @return string
-     */
-    protected function getFilenameFormat()
-    {
-        return '{{TableName}}.php';
     }
 
     /**

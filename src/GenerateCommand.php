@@ -135,7 +135,12 @@ class GenerateCommand extends Command
                 continue;
             }
 
-            $this->fs->delete($boilerplateFullPath);
+            if ($this->fs->isDirectory($boilerplateFullPath)) {
+                $this->fs->deleteDirectory($boilerplateFullPath);
+            } else {
+                $this->fs->delete($boilerplateFullPath);
+            }
+
             $this->output->writeln('<info> - Removed ' . $boilerplate . '</info>');
         }
 
