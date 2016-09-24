@@ -54,23 +54,7 @@ abstract class AbstractGenerator
     /**
      * @return string
      */
-    abstract protected function getStub();
-
-    /**
-     * @return string
-     */
     abstract protected function getDestinationPath();
-
-    /**
-     * @return array
-     */
-    abstract protected function getReplacements($table);
-
-    /**
-     * @return string
-     */
-    abstract protected function getFilenameFormat();
-
 
     /**
      * @return string

@@ -2,14 +2,27 @@
 
 namespace Jeroenherczeg\Bee\Generators;
 
-use Illuminate\Support\Collection;
-
 /**
  * Class CombinedGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
 abstract class CombinedGenerator extends AbstractGenerator
 {
+    /**
+     * @return string
+     */
+    abstract protected function getStub();
+
+    /**
+     * @return array
+     */
+    abstract protected function getReplacements($table);
+
+    /**
+     * @return string
+     */
+    abstract protected function getFilenameFormat();
+
     /**
      * @return $this
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException

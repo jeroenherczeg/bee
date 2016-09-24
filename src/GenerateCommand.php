@@ -3,6 +3,7 @@
 namespace Jeroenherczeg\Bee;
 
 use Illuminate\Filesystem\Filesystem;
+use Jeroenherczeg\Bee\Generators\Laravel\BaseGenerator;
 use Jeroenherczeg\Bee\Generators\Laravel\ControllerGenerator;
 use Jeroenherczeg\Bee\Generators\Laravel\FactoryGenerator;
 use Jeroenherczeg\Bee\Generators\Laravel\MigrationGenerator;
@@ -22,6 +23,8 @@ use Jeroenherczeg\Bee\ValueObjects\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * Class GenerateCommand
@@ -79,6 +82,7 @@ class GenerateCommand extends Command
              ->copyBaseFiles()
              ->generateCode()
              ->installDependencies()
+             ->configureProject()
              ->runTests();
 
         $this->output->writeln(PHP_EOL . '<comment>Good luck and have fun!</comment>');
@@ -146,7 +150,7 @@ class GenerateCommand extends Command
             $boilerplateFullPath = $this->config->getProjectDir() . '/' . $boilerplate;
 
             if (!$this->fs->exists($boilerplateFullPath)) {
-                $this->output->writeln(' - <error>' . $boilerplate . '</error> doesn\'t exists! ');
+                $this->output->writeln(' ✗ <error>' . $boilerplate . '</error> doesn\'t exists! ');
                 continue;
             }
 
@@ -156,7 +160,7 @@ class GenerateCommand extends Command
                 $this->fs->delete($boilerplateFullPath);
             }
 
-            $this->output->writeln('<info> - Removed ' . $boilerplate . '</info>');
+            $this->output->writeln('<info> ✓ Removed ' . $boilerplate . '</info>');
         }
 
         return $this;
@@ -182,7 +186,7 @@ class GenerateCommand extends Command
             }
 
             $this->fs->copy($this->config->getBaseFilesDir() . $fileFullPath, $this->config->getProjectDir() . '/' . $fileFullPath);
-            $this->output->writeln('<info> - Copied ' . $fileFullPath . '</info>');
+            $this->output->writeln('<info> ✓ Copied ' . $fileFullPath . '</info>');
         }
 
         return $this;
@@ -195,6 +199,7 @@ class GenerateCommand extends Command
     {
         $this->output->writeln(PHP_EOL . '<comment>Generating code ...</comment>');
 
+        $results['laravel base']         = (new BaseGenerator())->generate()->getResults();
         $results['laravel migrations']   = (new MigrationGenerator())->generate()->getResults();
         $results['laravel models']       = (new ModelGenerator())->generate()->getResults();
         $results['laravel factories']    = (new FactoryGenerator())->generate()->getResults();
@@ -213,9 +218,9 @@ class GenerateCommand extends Command
         $results['vue config']           = (new ConfigGenerator())->generate()->getResults();
 
         foreach ($results as $generator => $filenames) {
-            $this->output->writeln(PHP_EOL . ' - Generated ' . $generator);
+            $this->output->writeln(PHP_EOL . ' ➝ Generated ' . $generator);
             foreach ($filenames as $filename ) {
-                $this->output->writeln('<info>   - ' . $filename . '</info>');
+                $this->output->writeln('<info>   ✶ ' . $filename . '</info>');
             }
         }
 
@@ -229,19 +234,36 @@ class GenerateCommand extends Command
     {
         $this->output->writeln(PHP_EOL . '<comment>Installing dependencies ...</comment>');
 
-        //$composer = file_get_contents(getcwd() . '/composer.json');
-        //$newComposer = str_replace('"App\\": "app/",', '"App\\": "app/",' . PHP_EOL . '            "AppTest\\": "tests/"', $composer);
-        //file_put_contents(getcwd() . '/composer.json', $newComposer);
-        //
-        //$this->runCommand('composer require league/fractal');
-        //
-        //$this->runCommand('composer require laravel/passport');
-        //
-        //$this->runCommand('php artisan storage:link');
-        //
-        //$this->runCommand('npm install');
-        //
-        //$this->runCommand('gulp');
+        $this->runCommand('composer require league/fractal');
+        $this->output->writeln('<info> ✓ Installed Fractal</info>');
+
+        $this->runCommand('npm install');
+        $this->output->writeln('<info> ✓ Installed NPM Packages</info>');
+
+        return $this;
+    }
+
+    /**
+     * Configuring the project
+     */
+    private function configureProject()
+    {
+        $this->output->writeln(PHP_EOL . '<comment>Configuring the project ...</comment>');
+
+        $composer = file_get_contents(getcwd() . '/composer.json');
+        $newComposer = str_replace('"App\\": "app/",', '"App\\": "app/",' . PHP_EOL . '            "AppTest\\": "tests/"', $composer);
+        file_put_contents(getcwd() . '/composer.json', $newComposer);
+        $this->output->writeln('<info> ✓ Added composer autoloading for test namespace</info>');
+
+        $this->runCommand('php artisan storage:link');
+        $this->output->writeln('<info> ✓ Linked storage to public</info>');
+
+        // --- TEMP FIX ---
+        $this->runCommand('npm i webpack@2.1.0-beta.22');
+        // --- TEMP FIX ---
+
+        $this->runCommand('gulp');
+        $this->output->writeln('<info> ✓ Runned gulp for webpack and less compilation</info>');
 
         return $this;
     }
@@ -252,10 +274,23 @@ class GenerateCommand extends Command
     private function runTests()
     {
         $this->output->writeln(PHP_EOL . '<comment>Running tests ...</comment>');
-        //
-        //$this->runCommand('./vendor/bin/phpunit');
-        //
+
+        $output = $this->runCommand('./vendor/bin/phpunit');
+        $this->output->writeln(PHP_EOL . $output);
+
         return $this;
     }
 
+    private function runCommand($command)
+    {
+        $process = new Process($command);
+        $process->setTimeout(3600);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        return $process->getOutput();
+    }
 }

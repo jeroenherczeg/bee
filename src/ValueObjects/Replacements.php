@@ -55,7 +55,7 @@ class Replacements
             'table_names' => $this->str->lower($this->str->plural($this->table->name)),
             'TABLE_NAME'  => $this->str->upper($this->table->name),
             'TABLE_NAMES' => $this->str->upper($this->str->plural($this->table->name)),
-            'timestamp'   => date('Y_m_d_His'),
+            'timestamp'   => date('Y_m_d_' . str_replace('.', '', microtime(true))),
         ];
     }
 }

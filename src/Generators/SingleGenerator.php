@@ -5,11 +5,26 @@ namespace Jeroenherczeg\Bee\Generators;
 use Jeroenherczeg\Bee\ValueObjects\Replacements;
 
 /**
- * Class AbstractGenerator
+ * Class SingleGenerator
  * @package Jeroenherczeg\Bee\Generators
  */
 abstract class SingleGenerator extends AbstractGenerator
 {
+    /**
+     * @return string
+     */
+    abstract protected function getStub();
+
+    /**
+     * @return array
+     */
+    abstract protected function getReplacements($table);
+
+    /**
+     * @return string
+     */
+    abstract protected function getFilenameFormat();
+
     /**
      * @return $this
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException

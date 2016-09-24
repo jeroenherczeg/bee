@@ -2,15 +2,15 @@
 
 namespace {{namespace}}\Http\Controllers;
 
-use {{namespace}}\Http\Requests\{{class}}Request;
-use {{namespace}}\Models\Eloquent\{{class}};
-use {{namespace}}\Models\Transformers\{{class}}Transformer;
+use {{namespace}}\Http\Requests\{{TableName}}Request;
+use {{namespace}}\Models\Eloquent\{{TableName}};
+use {{namespace}}\Models\Transformers\{{TableName}}Transformer;
 
 /**
- * Class {{class}}Controller
+ * Class {{TableName}}Controller
  * @package {{namespace}}\Http\Controllers
  */
-class {{class}}Controller extends Controller
+class {{TableName}}Controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,23 +19,23 @@ class {{class}}Controller extends Controller
      */
     public function index()
     {
-        ${{models}} = {{class}}::all();
+        ${{table_names}} = {{TableName}}::all();
 
-        return $this->respondWithCollection(${{models}}, new {{class}}Transformer());
+        return $this->respondWithCollection(${{table_names}}, new {{TableName}}Transformer());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param {{class}}Request $request
+     * @param {{TableName}}Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store({{class}}Request $request)
+    public function store({{TableName}}Request $request)
     {
-        ${{model}} = {{class}}::create($request->all());
-        ${{model}}->fresh();
+        ${{table_name}} = {{TableName}}::create($request->all());
+        ${{table_name}}->fresh();
 
-        return $this->respondWithCreatedItem(${{model}}, new {{class}}Transformer());
+        return $this->respondWithCreatedItem(${{table_name}}, new {{TableName}}Transformer());
     }
 
     /**
@@ -46,34 +46,34 @@ class {{class}}Controller extends Controller
      */
     public function show($id)
     {
-        ${{model}} = {{class}}::whereId($id)->first();
+        ${{table_name}} = {{TableName}}::whereId($id)->first();
 
-        if (!${{model}}) {
+        if (!${{table_name}}) {
             return $this->respondWithErrorNotFound();
         }
 
-        return $this->respondWithItem(${{model}}, new {{class}}Transformer());
+        return $this->respondWithItem(${{table_name}}, new {{TableName}}Transformer());
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param {{class}}Request $request
+     * @param {{TableName}}Request $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update({{class}}Request $request, $id)
+    public function update({{TableName}}Request $request, $id)
     {
-        ${{model}} = {{class}}::whereId($id)->first();
+        ${{table_name}} = {{TableName}}::whereId($id)->first();
 
-        if (!${{model}}) {
+        if (!${{table_name}}) {
             return $this->respondWithErrorNotFound();
         }
 
-        ${{model}}->update($request->all());
-        ${{model}}->fresh();
+        ${{table_name}}->update($request->all());
+        ${{table_name}}->fresh();
 
-        return $this->respondWithItem(${{model}}, new {{class}}Transformer());
+        return $this->respondWithItem(${{table_name}}, new {{TableName}}Transformer());
     }
 
     /**
@@ -84,13 +84,13 @@ class {{class}}Controller extends Controller
      */
     public function destroy($id)
     {
-        ${{model}} = {{class}}::whereId($id)->first();
+        ${{table_name}} = {{TableName}}::whereId($id)->first();
 
-        if (!${{model}}) {
+        if (!${{table_name}}) {
             return $this->respondWithErrorNotFound();
         }
 
-        ${{model}}->delete();
+        ${{table_name}}->delete();
 
         return $this->respondOk();
     }
